@@ -1,0 +1,29 @@
+---
+- name: add repository gpg keys
+  apt_key:
+    state: '{{ item.state | default("present") }}'
+    id: '{{ item.id | default(omit) }}'
+    keyserver: '{{ item.keyserver | default(omit) }}'  
+    url: '{{ item.url | default(omit) }}'
+  with_items:
+    - '{{ repo_keys_base + repo_keys|default([]) }}'
+  notify:
+    - update apt cache
+
+- name: add repositories
+  apt_repository:
+    state: '{{ item.state | default("present") }}'
+    repo: '{{ item.repo }}'
+    update_cache: no
+  with_items:
+    - '{{ repos_base + repos|default([]) }}'
+  notify:
+    - update apt cache
+
+- meta: flush_handlers
+
+- name: install ubuntu-cloud-keyring
+  apt:
+    state: present
+    name: ubuntu-cloud-keyring
+  ignore_errors: true

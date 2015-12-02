@@ -1,0 +1,7 @@
+---
+repo_keys_base:
+  - id: 5EDB1B62EC4926EA
+    keyserver: keyserver.ubuntu.com
+
+repos_base:
+  - repo: deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/liberty main

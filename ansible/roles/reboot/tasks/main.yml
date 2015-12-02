@@ -1,0 +1,23 @@
+---
+- name: reboot machine
+  shell: sleep 2 && shutdown -r now "Reboot after deploy"
+  async: 1
+  poll: 0
+  ignore_errors: true
+  when: do_reboot|default(false)
+
+- name: wait for shutdown
+  pause: minutes=1
+  when: do_reboot|default(false)
+
+- name: waiting for server to come back
+  local_action: command /usr/bin/ssh "{{ inventory_hostname }}" uptime
+  register: response
+  retries: 90
+  delay: 10
+  until: response.stdout.find("load average") != -1
+  become: false
+  when: do_reboot|default(false)
+
+- debug: msg="System uptime is {{ response.stdout }}"
+  when: do_reboot|default(false)

@@ -1,0 +1,11 @@
+---
+- name: base setup
+  hosts: stack-nodes
+  become: yes
+  tags:
+    - common
+
+  roles:
+    - { role: base, tags: ['base'] }
+
+# vim: ft=ansible

@@ -1,0 +1,16 @@
+---
+sshd_base_config:
+  - { option: 'PermitEmptyPasswords', value: 'no'  }
+  - { option: 'PasswordAuthentication', value: 'no'  }
+  - { option: 'PermitRootLogin', value: 'without-password'  }
+  - { option: 'GSSAPIAuthentication', value: 'no'  }
+
+packages_base:
+  - { name: screen }
+  - { name: telnet }
+  - { name: tcpdump }
+  - { name: unattended-upgrades }
+  - { name: vim }
+  - { name: bc }
+
+# vim: ft=ansible

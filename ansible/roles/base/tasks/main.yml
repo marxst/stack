@@ -1,0 +1,37 @@
+---
+- name: set SSH options
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^{{ item.option  }}'
+    line: '{{ item.option  }} {{ item.value }}'
+    state: present
+  with_items:
+    - '{{ sshd_base_config + sshd_config|default([]) }}'
+  notify: restart sshd
+
+- name: disable automatic apt recommends
+  copy:
+    dest: /etc/apt/apt.conf.d/99recommends
+    content: |
+      APT::Get::Install-Recommends "false";
+      APT::Get::Install-Suggests "false";
+    owner: root
+    group: root
+    mode: 0644
+
+- name: upgrade system
+  apt:
+    update_cache: yes 
+    upgrade: dist
+
+- name: install packages
+  apt:
+    update_cache: no
+    name: '{{ item.name  }}'
+    state: "{{ item.state|default('present') }}"
+  with_items:
+    - "{{ packages_base + packages_addon|default([]) }}"
+
+- meta: flush_handlers
+
+# vim: ft=ansible

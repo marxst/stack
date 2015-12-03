@@ -22,6 +22,8 @@
   roles:
     - role: memcached
       tags: ['memcached']
+    - role: mariadb
+      tags: ['mariadb']
     - role: reboot
       tags: ['reboot']
 

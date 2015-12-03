@@ -1,0 +1,23 @@
+---
+- name: install rabbitmq
+  apt:
+    state: present
+    name: rabbitmq-server
+
+- name: enable / start rabbitmq service
+  service:
+    name: rabbitmq-server
+    enabled: '{{ rabbitmq_enabled | default("yes") }}'
+    state: '{{ rabbitmq_state | default("started") }}'
+
+- name: set rabbitmq env
+  lineinfile:
+    dest: /etc/rabbitmq/rabbitmq-env.conf
+    state: present
+    regexp: ^#*{{ item.option }}\s*=
+    line: '{{ item.option }}={{ item.value }}'
+  with_items:
+    - '{{ rabbitmq_env_base + rabbitmq_env|default([]) }}'
+  notify: restart rabbitmq
+
+- meta: flush_handlers

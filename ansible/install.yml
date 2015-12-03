@@ -8,5 +8,19 @@
   roles:
     - role: base
       tags: ['base']
+    - role: repositories
+      tags: ['repositories']
+
+
+- name: set up controller node
+  hosts: controller-nodes
+  gather_facts: no
+  become: yes
+  tags:
+    - controller
+
+  roles:
+    - role: reboot
+      tags: ['reboot']
 
 # vim: ft=ansible

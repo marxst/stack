@@ -1,0 +1,11 @@
+---
+- name: install memcached
+  apt:
+    state: present
+    name: memcached
+
+- name: enable / start memcached service
+  service:
+    name: memcached
+    enabled: '{{ memcached_enabled | default("yes") }}'
+    state: '{{ memcached_state | default("started") }}'

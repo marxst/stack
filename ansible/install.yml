@@ -20,6 +20,8 @@
     - controller
 
   roles:
+    - role: memcached
+      tags: ['memcached']
     - role: reboot
       tags: ['reboot']
 

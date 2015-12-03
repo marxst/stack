@@ -1,4 +1,7 @@
 .vault_pass
+group_vars/
+host_vars/
+hosts
 # vim ignores
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]

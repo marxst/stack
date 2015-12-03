@@ -1,8 +1,0 @@
-[all-in-one-node]
-stack.chaosmoon.net
-
-[stack-nodes:children]
-controller-nodes
-
-[controller-nodes:children]
-all-in-one-node

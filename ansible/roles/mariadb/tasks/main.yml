@@ -1,0 +1,49 @@
+---
+- name: install mariadb
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - mariadb-server
+    - python-mysqldb
+
+- name: enable / start mariadb service
+  service:
+    name: mysql
+    enabled: '{{ mysql_enabled | default("yes") }}'
+    state: '{{ mysql_state | default("started") }}'
+
+- name: clean up db user
+  mysql_user:
+    state: absent
+    check_implicit_admin: yes
+    login_password: '{{ mysql_root_password }}'
+    login_user: root
+    name: '{{ item.name }}'
+    host: '{{ item.host }}'
+  with_items:
+    - { name: 'root', host: '{{ ansible_hostname }}' }
+    - { name: 'root', host: '{{ ansible_fqdn }}' }
+    - { name: 'root', host: '127.0.0.1' }
+    - { name: 'root', host: '::1' }
+  when: mysql_state|default("started") == "started"
+
+- name: set root password
+  mysql_user:
+    state: present
+    check_implicit_admin: yes
+    login_password: '{{ mysql_root_password }}'
+    login_user: 'root'
+    name: 'root'
+    host: 'localhost'
+    password: '{{ mysql_root_password }}'
+  when: mysql_state|default("started") == "started"
+
+- name: base configuration
+  template:
+    dest: /etc/mysql/conf.d/openstack-controller.cnf
+    src: openstack-controller.cnf.j2
+    mode: 0644
+    owner: root
+    group: root
+  notify: reload mariadb

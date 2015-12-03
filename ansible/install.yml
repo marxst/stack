@@ -6,6 +6,7 @@
     - common
 
   roles:
-    - { role: base, tags: ['base'] }
+    - role: base
+      tags: ['base']
 
 # vim: ft=ansible

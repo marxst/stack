@@ -24,6 +24,8 @@
       tags: ['memcached']
     - role: mariadb
       tags: ['mariadb']
+    - role: rabbitmq
+      tags: ['rabbitmq']
     - role: reboot
       tags: ['reboot']
 

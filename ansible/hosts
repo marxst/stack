@@ -6,3 +6,6 @@ controller-nodes
 
 [controller-nodes:children]
 all-in-one-node
+
+[storage-nodes:children]
+all-in-one-node

@@ -34,6 +34,8 @@
       tags: ['os_common']
     - role: keystone
       tags: ['keystone']
+    - role: cinder-controller
+      tags: ['cinder-controller']
     - role: reboot
       tags: ['reboot']
 

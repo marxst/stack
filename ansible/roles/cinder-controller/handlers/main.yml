@@ -1,0 +1,14 @@
+---
+- name: cinder db_sync
+  command: cinder-manage db sync
+  become_user: cinder
+
+- name: restart cinder-scheduler
+  service:
+    name: cinder-scheduler
+    state: restarted
+
+- name: restart cinder-api
+  service:
+    name: cinder-api
+    state: restarted

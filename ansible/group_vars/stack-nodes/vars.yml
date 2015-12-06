@@ -9,3 +9,37 @@ mysql_heat_password: '{{ vault_mysql_heat_password }}'
 mysql_murano_password: '{{ vault_mysql_murano_password }}'
 rabbitmq_openstack_password: '{{ vault_rabbitmq_openstack_password }}'
 metadata_proxy_shared_secret: '{{ vault_metadata_proxy_shared_secret }}'
+
+os_users:
+  admin:
+    domain: Default
+    project: admin
+    password: "{{ os_admin_password }}"
+  glance:
+    domain: Default
+    project: service
+    password: "{{ vault_glance_password }}"
+  nova:
+    domain: Default
+    project: service
+    password: "{{ vault_nova_password }}"
+  cinder:
+    domain: Default
+    project: service
+    password: "{{ vault_cinder_password }}"
+  neutron:
+    domain: Default
+    project: service
+    password: "{{ vault_neutron_password }}"
+  heat:
+    domain: Default
+    project: service
+    password: "{{ vault_heat_password }}"
+  heat_domain_admin:
+    domain: heat
+    project: service
+    password: "{{ vault_heat_domain_admin_password }}"
+  murano:
+    domain: Default
+    project: service
+    password: "{{ vault_murano_password }}"

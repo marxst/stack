@@ -34,6 +34,8 @@
       tags: ['os_common']
     - role: keystone
       tags: ['keystone']
+    - role: cinder-controller
+      tags: ['cinder-controller']
     - role: reboot
       tags: ['reboot']
 
@@ -45,7 +47,9 @@
     - storage
 
   roles:
-    - role: os_disksetup
-      tags: ['os_disksetup']
+    - role: cinder-storage
+      tags: ['cinder-storage']
+    - role: cinder-lvm
+      tags: ['cinder-lvm']
 
 # vim: ft=ansible

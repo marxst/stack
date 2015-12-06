@@ -1,0 +1,55 @@
+---
+- name: install cinder controller components
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - cinder-api
+    - cinder-scheduler
+    - python-cinderclient
+
+- name: create cinder DB
+  mysql_db:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: cinder
+  notify: cinder db_sync
+
+- name: create cinder DB user
+  mysql_user:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: cinder
+    password: '{{ mysql_cinder_password }}'
+    host: '{{ item }}'
+    priv: cinder.*:ALL
+  with_items:
+    - localhost
+    - '%'
+  notify: cinder db_sync
+
+- name: cinder control base configuration
+  ini_file:
+    dest: /etc/cinder/cinder.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  no_log: true
+  with_items:
+    - '{{ cinder_control_base_config + cinder_control_config|default([]) }}'
+  notify:
+    - cinder db_sync
+    - restart cinder-scheduler
+    - restart cinder-api
+
+- name: Remove unnecessary cinder sqlite db
+  file:
+    path: /var/lib/cinder/cinder.sqlite
+    state: absent
+
+- meta: flush_handlers

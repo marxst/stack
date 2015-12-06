@@ -1,0 +1,30 @@
+---
+- name: install cinder storage components
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - cinder-volume
+    - python-mysqldb
+
+- name: cinder storage base configuration
+  ini_file:
+    dest: /etc/cinder/cinder.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  no_log: true
+  with_items:
+    - '{{ cinder_storage_base_config + cinder_storage_config|default([]) }}'
+  notify:
+    - restart cinder-volume
+
+- name: Remove unnecessary cinder sqlite db
+  file:
+    path: /var/lib/cinder/cinder.sqlite
+    state: absent
+
+- meta: flush_handlers

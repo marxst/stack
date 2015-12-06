@@ -49,7 +49,7 @@
   roles:
     - role: cinder-storage
       tags: ['cinder-storage']
-    - role: os_disksetup
-      tags: ['os_disksetup']
+    - role: cinder-lvm
+      tags: ['cinder-lvm']
 
 # vim: ft=ansible

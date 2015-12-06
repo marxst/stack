@@ -1,2 +1,11 @@
 ---
 mysql_root_password: '{{ vault_mysql_root_password }}'
+mysql_keystone_password: '{{ vault_mysql_keystone_password }}'
+mysql_glance_password: '{{ vault_mysql_glance_password }}'
+mysql_nova_password: '{{ vault_mysql_nova_password }}'
+mysql_cinder_password: '{{ vault_mysql_cinder_password }}'
+mysql_neutron_password: '{{ vault_mysql_neutron_password }}'
+mysql_heat_password: '{{ vault_mysql_heat_password }}'
+mysql_murano_password: '{{ vault_mysql_murano_password }}'
+rabbitmq_openstack_password: '{{ vault_rabbitmq_openstack_password }}'
+metadata_proxy_shared_secret: '{{ vault_metadata_proxy_shared_secret }}'

@@ -1,0 +1,9 @@
+---
+- name: keystone db_sync
+  command: keystone-manage db_sync
+  become_user: keystone
+
+- name: reload apache2
+  service:
+    name: apache2
+    state: reloaded

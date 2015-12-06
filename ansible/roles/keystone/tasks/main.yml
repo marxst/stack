@@ -1,0 +1,85 @@
+---
+- name: prevent keystone autostart
+  copy:
+    dest: /etc/init/keystone.override
+    content: manual
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install keystone
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - keystone
+    - python-openstackclient
+    - apache2
+    - libapache2-mod-wsgi
+
+- name: create keystond DB
+  mysql_db:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: keystone
+  notify: keystone db_sync
+
+- name: create keystone DB user
+  mysql_user:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: keystone
+    password: '{{ mysql_keystone_password }}'
+    host: '{{ item }}'
+    priv: keystone.*:ALL
+  with_items:
+    - localhost
+    - '%'
+  notify: keystone db_sync
+
+- name: keystone base configuration
+  ini_file:
+    dest: /etc/keystone/keystone.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  no_log: true
+  with_items:
+    - '{{ keystone_base_config + keystone_config|default([]) }}'
+  notify: keystone db_sync
+
+- name: add apache2 keystone wsgi configuration
+  template:
+    src: wsgi-keystone.conf.j2
+    dest: /etc/apache2/sites-available/wsgi-keystone.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload apache2
+
+- name: enable apache2 keystone wsgi configuration
+  file:
+    src: /etc/apache2/sites-available/wsgi-keystone.conf
+    dest: /etc/apache2/sites-enabled/wsgi-keystone.conf
+    state: link
+  notify: reload apache2
+
+- name: disable apache2 default vhost
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+  notify: reload apache2
+
+- name: Remove unnecessary keystone sqlite db
+  file:
+    path: /var/lib/keystone/keystone.db
+    state: absent
+
+- meta: flush_handlers
+
+- include: keystone-setup.yml

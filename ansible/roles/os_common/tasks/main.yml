@@ -1,0 +1,9 @@
+---
+- name: create rabbitmq openstack user
+  rabbitmq_user:
+    state: present
+    user: openstack
+    password: '{{ rabbitmq_openstack_password }}'
+    configure_priv: .*
+    write_priv: .*
+    read_priv: .*

@@ -1,5 +1,4 @@
 ---
 rabbitmq_bind_address: 127.0.0.1
 rabbitmq_env_base:
-  - { option: NODENAME, value: rabbit@localhost }
   - { option: NODE_IP_ADDRESS, value: '{{ rabbitmq_bind_address }}' }

@@ -1,0 +1,5 @@
+---
+- name: reload iptables
+  service:
+    name: iptables-persistent
+    state: reloaded

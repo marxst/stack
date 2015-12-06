@@ -1,0 +1,5 @@
+---
+fw_rules_v4_base:
+  - { proto: tcp, port: 22 }
+fw_rules_v6_base:
+  - { proto: tcp, port: 22 }

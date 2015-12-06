@@ -10,6 +10,8 @@
       tags: ['base']
     - role: repositories
       tags: ['repositories']
+    - role: firewall
+      tags: ['firewall']
 
 
 - name: set up controller node

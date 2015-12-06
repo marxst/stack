@@ -1,0 +1,27 @@
+---
+- name: install iptables-persistent
+  apt:
+    name: iptables-persistent
+    state: present
+
+- name: create firewall dir
+  file:
+    path: /etc/iptables
+    state: directory
+    owner: root
+    group: root
+    mode: 0640
+
+- name: create firewall configuration
+  template:
+    src: '{{ item }}'
+    dest: /etc/iptables/{{ item }}
+    owner: root
+    group: root
+    mode: 0640
+  notify: reload iptables
+  with_items:
+    - rules.v4
+    - rules.v6
+
+- meta: flush_handlers

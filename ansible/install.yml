@@ -47,6 +47,8 @@
     - storage
 
   roles:
+    - role: cinder-storage
+      tags: ['cinder-storage']
     - role: os_disksetup
       tags: ['os_disksetup']
 

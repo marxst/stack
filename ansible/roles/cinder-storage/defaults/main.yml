@@ -1,0 +1,21 @@
+---
+os_mgmt_iface: eth0
+os_public_hostname: '{{ ansible_fqdn }}'
+cinder_storage_base_config:
+  - { section: 'database', option: 'connection', value: 'mysql+pymysql://cinder:{{ mysql_cinder_password }}@localhost/cinder' }
+  - { section: 'DEFAULT', option: 'rpc_backend', value: 'rabbit' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_host', value: 'localhost' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_userid', value: 'openstack' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_password', value: '{{ rabbitmq_openstack_password }}' }
+  - { section: 'DEFAULT', option: 'auth_strategy', value: 'keystone' }
+  - { section: 'keystone_authtoken', option: 'auth_uri', value: 'http://{{ os_public_hostname }}:5000' }
+  - { section: 'keystone_authtoken', option: 'auth_url', value: 'http://{{ os_public_hostname }}:35357' }
+  - { section: 'keystone_authtoken', option: 'auth_plugin', value: 'password' }
+  - { section: 'keystone_authtoken', option: 'project_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'user_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'project_name', value: 'service' }
+  - { section: 'keystone_authtoken', option: 'username', value: 'cinder' }
+  - { section: 'keystone_authtoken', option: 'password', value: '{{ os_users.cinder.password }}' }
+  - { section: 'DEFAULT', option: 'my_ip' , value: "{{ hostvars[inventory_hostname]['ansible_' + os_mgmt_iface ]['ipv4']['address'] }}" }
+  - { section: 'DEFAULT', option: 'glance_host' , value: 'localhost' }
+  - { section: 'oslo_concurrency', option: 'lock_path' , value: '/var/lib/cinder/tmp' }

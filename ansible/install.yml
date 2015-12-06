@@ -32,6 +32,8 @@
       tags: ['mongodb']
     - role: os_common
       tags: ['os_common']
+    - role: keystone
+      tags: ['keystone']
     - role: reboot
       tags: ['reboot']
 

@@ -1,0 +1,116 @@
+---
+- name: create services
+  keystone:
+    command: ensure_service
+    token: '{{ os_admin_token }}'
+    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    service_name: '{{ item.name }}'
+    service_type: '{{ item.type }}'
+    description: '{{ item.desc }}'
+    insecure: true
+  register: add_service
+  until: add_service|success
+  retries: 5
+  delay: 10
+  with_items:
+    - '{{ os_services }}'
+
+- name: create endpoints
+  keystone:
+    command: ensure_endpoint
+    token: '{{ os_admin_token }}'
+    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    region_name: '{{ item.region }}'
+    service_name: '{{ item.name }}'
+    service_type: '{{ item.type }}'
+    insecure: true
+    endpoint_list:
+      - url: '{{ item.public }}'
+        interface: public
+      - url: '{{ item.admin }}'
+        interface: admin
+      - url: '{{ item.internal }}'
+        interface: "internal"
+  register: add_endpoint
+  until: add_endpoint|success
+  retries: 5
+  delay: 10
+  with_items:
+    - '{{ os_endpoints }}'
+
+- name: create projects
+  keystone:
+    command: ensure_project
+    token: '{{ os_admin_token }}'
+    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    project_name: '{{ item.name }}'
+    domain_name: '{{ item.domain }}'
+    description: '{{ item.desc }}'
+    insecure: true
+  register: add_project
+  until: add_project|success
+  retries: 5
+  delay: 10
+  with_items:
+    - '{{ os_projects }}'
+
+- name: create domains
+  keystone:
+    command: ensure_domain
+    token: '{{ os_admin_token }}'
+    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    insecure: true
+    domain_name: '{{ item.name }}'
+  register: add_domain
+  until: add_domain|success
+  retries: 5
+  delay: 10
+  with_items:
+    - '{{ os_domains }}'
+
+- name: create users
+  keystone:
+    command: ensure_user
+    token: '{{ os_admin_token }}'
+    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    user_name: '{{ item.key }}'
+    password: '{{ item.value.password }}'
+    domain_name: '{{ item.value.domain }}'
+    project_name: '{{ item.value.project }}'
+    insecure: true
+  register: add_user
+  until: add_user|success
+  retries: 5
+  delay: 10
+  with_dict: '{{ os_users }}'
+  no_log: true
+
+- name: create roles
+  keystone:
+    command: ensure_role
+    token: '{{ os_admin_token }}'
+    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    role_name: '{{ item.name }}'
+    insecure: true
+  register: add_role
+  until: add_role|success
+  retries: 5
+  delay: 10
+  with_items:
+    - '{{ os_roles }}'
+
+- name: create role assignments
+  keystone:
+    command: ensure_user_role
+    token: '{{ os_admin_token }}'
+    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    user_name: '{{ item.user }}'
+    project_name: '{{ item.project }}'
+    role_name: '{{ item.role }}'
+    insecure: true
+  register: add_role_assignment
+  until: add_role_assignment|success
+  retries: 5
+  delay: 10
+  with_items:
+    - '{{ os_role_assignments }}'

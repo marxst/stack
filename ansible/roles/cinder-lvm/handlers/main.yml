@@ -1,3 +1,13 @@
 ---
 - name: vgscan
   command: vgscan
+
+- name: restart tgt
+  service:
+    name: tgt
+    state: restarted
+
+- name: restart cinder-volume
+  service:
+    name: cinder-volume
+    state: restarted

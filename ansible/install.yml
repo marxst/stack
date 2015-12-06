@@ -28,6 +28,8 @@
       tags: ['mariadb']
     - role: rabbitmq
       tags: ['rabbitmq']
+    - role: mongodb
+      tags: ['mongodb']
     - role: reboot
       tags: ['reboot']
 

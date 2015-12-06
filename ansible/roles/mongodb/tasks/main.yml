@@ -1,0 +1,28 @@
+---
+- name: install mongodb
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - mongodb-server
+    - python-pymongo
+
+- name: enable / start mongodb service
+  service:
+    name: mongodb
+    enabled: '{{ mongodb_enabled | default("yes") }}'
+    state: '{{ mongodb_state | default("started") }}'
+
+- name: base configuration
+  lineinfile:
+    dest: /etc/mongodb.conf
+    owner: root
+    group: root
+    mode: 0644
+    regexp: ^#*{{ item.option }}\s*=
+    line: '{{ item.option }} = {{ item.value }}'
+  with_items:
+    - '{{ mongodb_config_base + mongodb_config|default([]) }}'
+  notify: restart mongodb
+
+- meta: flush_handlers

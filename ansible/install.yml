@@ -37,4 +37,15 @@
     - role: reboot
       tags: ['reboot']
 
+- name: set up storage nodes
+  hosts: storage-nodes
+  gather_facts: no
+  become: yes
+  tags:
+    - storage
+
+  roles:
+    - role: os_disksetup
+      tags: ['os_disksetup']
+
 # vim: ft=ansible

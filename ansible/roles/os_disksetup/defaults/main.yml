@@ -1,0 +1,4 @@
+---
+cinder_vg_pvs:
+  - /dev/sda
+  - /dev/sdb

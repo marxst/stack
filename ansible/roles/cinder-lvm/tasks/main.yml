@@ -1,4 +1,12 @@
 ---
+- name: install package for cinder lvm backend
+  apt:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - lvm2
+    - tgt
+
 - name: create cinder-volumes VG
   lvg:
     vg: cinder-volumes
@@ -13,3 +21,21 @@
     backrefs: yes
     line: \1[ {{ cinder_vg_pvs|map('basename')|join(',')|regex_replace('([^,]*)','"a/\1/"') }} ,"r/.*/"]
   notify: vgscan
+
+- name: configure cinder lvm backend
+  ini_file:
+    dest: /etc/cinder/cinder.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  no_log: true
+  with_items:
+    - '{{ cinder_lvm_base_config + cinder_lvm_config|default([]) }}'
+  notify:
+    - restart tgt
+    - restart cinder-volume
+
+- meta: flush_handlers

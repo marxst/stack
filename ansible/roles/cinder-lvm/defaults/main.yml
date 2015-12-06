@@ -2,3 +2,11 @@
 cinder_vg_pvs:
   - /dev/sda
   - /dev/sdb
+
+cinder_lvm_base_config:
+  - { section: 'DEFAULT', option: 'enabled_backends', value: 'lvm' }
+  - { section: 'lvm', option: 'volume_driver', value: 'cinder.volume.drivers.lvm.LVMVolumeDriver' }
+  - { section: 'lvm', option: 'volume_group', value: 'cinder-volumes' }
+  - { section: 'lvm', option: 'iscsi_protocol', value: 'iscsi' }
+  - { section: 'lvm', option: 'iscsi_helper', value: 'tgtadm' }
+

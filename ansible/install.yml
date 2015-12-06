@@ -35,7 +35,7 @@
     - role: keystone
       tags: ['keystone']
     - role: cinder-controller
-      tags: ['cinder-controller']
+      tags: ['cinder','cinder-controller']
     - role: reboot
       tags: ['reboot']
 
@@ -48,8 +48,8 @@
 
   roles:
     - role: cinder-storage
-      tags: ['cinder-storage']
+      tags: ['cinder','cinder-storage']
     - role: cinder-lvm
-      tags: ['cinder-lvm']
+      tags: ['cinder','cinder-lvm']
 
 # vim: ft=ansible

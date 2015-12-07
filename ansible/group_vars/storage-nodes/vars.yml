@@ -1,0 +1,7 @@
+---
+raid1_src_devices:
+  - /dev/sda
+  - /dev/sdb
+raid1_dest_device: /dev/md0
+cinder_vg_pvs:
+  - '{{ raid1_dest_device }}'

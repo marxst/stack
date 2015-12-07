@@ -18,6 +18,7 @@ os_services:
   - { name: heat, desc: 'Orchestration', type: orchestration }
   - { name: heat-cfn, desc: 'Orchestration', type: cloudformation }
   - { name: murano, desc: 'Application Catalog for OpenStack', type: application_catalog }
+  - { name: swift, desc: 'OpenStack Object Storage', type: object-store }
 
 os_domains:
   - { name: heat , desc: 'Stack projects and users' }
@@ -77,6 +78,12 @@ os_endpoints:
     admin: http://{{ os_public_hostname }}:8082
     region: RegionOne
     type: application_catalog
+  - name: swift
+    public: http://{{ os_public_hostname }}:8080/v1/AUTH_%(tenant_id)s
+    internal: http://{{ os_public_hostname }}:8080/v1/AUTH_%(tenant_id)s
+    admin: http://{{ os_public_hostname }}:8080/v1
+    region: RegionOne
+    type: object-store
 
 os_projects:
   - { name: admin, desc: 'Admin Project', domain: Default }
@@ -96,6 +103,7 @@ os_role_assignments:
   - { role: admin, project: service, user: murano }
   - { role: admin, project: service, user: heat }
   - { role: admin, project: service, user: heat_domain_admin }
+  - { role: admin, project: service, user: swift }
 
 os_users:
   admin:
@@ -130,3 +138,7 @@ os_users:
     domain: Default
     project: service
     password: "{{ vault_murano_password }}"
+  swift:
+    domain: Default
+    project: service
+    password: "{{ vault_swift_password }}"

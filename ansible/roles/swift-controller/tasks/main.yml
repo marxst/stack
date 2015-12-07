@@ -1,0 +1,41 @@
+---
+- name: install swift controller components
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - swift
+    - swift-proxy
+    - python-swiftclient
+    - python-keystoneclient
+    - python-keystonemiddleware
+
+- name: create swift config directory
+  file:
+    state: directory
+    path: /etc/swift
+    owner: root
+    group: swift
+    mode: 0755
+
+- name: swift proxy-server configuration
+  ini_file:
+    dest: /etc/swift/proxy-server.conf
+    owner: root
+    group: swift
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  no_log: true
+  with_items:
+    - '{{ swift_proxy_config_base + swift_proxy_config|default([]) }}'
+  notify: restart swift-proxy
+
+- meta: flush_handlers
+
+- name: enable / start swift-proxy service
+  service:
+    name: swift-proxy
+    enabled: '{{ swift_proxy_enabled | default("yes") }}'
+    state: '{{ swift_proxy_state | default("started") }}'

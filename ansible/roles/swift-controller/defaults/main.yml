@@ -1,0 +1,42 @@
+---
+swift_proxy_config_base:
+  - { section: 'DEFAULT', option: 'bind_port', value: '8080' }
+  - { section: 'DEFAULT', option: 'user', value: 'swift' }
+  - { section: 'DEFAULT', option: 'swift_dir', value: '/etc/swift' }
+  - { section: 'pipeline:main', option: 'pipeline', value: 'catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk ratelimit authtoken keystoneauth container-quotas account-quotas slo dlo versioned_writes proxy-logging proxy-server' }
+  - { section: 'app:proxy-server', option: 'use', value: 'egg:swift#proxy' }
+  - { section: 'app:proxy-server', option: 'account_autocreate', value: 'True' }
+  - { section: 'filter:keystoneauth', option: 'use', value: 'egg:swift#keystoneauth' }
+  - { section: 'filter:keystoneauth', option: 'operator_roles', value: 'admin,user' }
+  - { section: 'filter:authtoken', option: 'paste.filter_factory', value: 'keystonemiddleware.auth_token:filter_factory' }
+  - { section: 'filter:authtoken', option: 'auth_uri', value: 'http://{{ os_public_hostname }}:5000' }
+  - { section: 'filter:authtoken', option: 'auth_url', value: 'http://{{ os_public_hostname }}:35357' }
+  - { section: 'filter:authtoken', option: 'auth_plugin', value: 'password' }
+  - { section: 'filter:authtoken', option: 'project_domain_id', value: 'default' }
+  - { section: 'filter:authtoken', option: 'user_domain_id', value: 'default' }
+  - { section: 'filter:authtoken', option: 'project_name', value: 'service' }
+  - { section: 'filter:authtoken', option: 'username', value: 'swift' }
+  - { section: 'filter:authtoken', option: 'password', value: '{ os_users.swift.password }}' }
+  - { section: 'filter:authtoken', option: 'delay_auth_decision', value: 'True' }
+  - { section: 'filter:cache', option: 'use', value: 'egg:swift#memcache' }
+  - { section: 'filter:cache', option: 'memcache_servers', value: '127.0.0.1:11211' }
+  - { section: 'filter:healthcheck', option: 'use', value: 'egg:swift#healthcheck' }
+  - { section: 'filter:ratelimit', option: 'use', value: 'egg:swift#ratelimit' }
+  - { section: 'filter:domain_remap', option: 'use', value: 'egg:swift#domain_remap' }
+  - { section: 'filter:catch_errors', option: 'use', value: 'egg:swift#catch_errors' }
+  - { section: 'filter:cname_lookup', option: 'use', value: 'egg:swift#cname_lookup' }
+  - { section: 'filter:staticweb', option: 'use', value: 'egg:swift#staticweb' }
+  - { section: 'filter:tempurl', option: 'use', value: 'egg:swift#tempurl' }
+  - { section: 'filter:formpost', option: 'use', value: 'egg:swift#formpost' }
+  - { section: 'filter:name_check', option: 'use', value: 'egg:swift#name_check' }
+  - { section: 'filter:list-endpoints', option: 'use', value: 'egg:swift#list_endpoints' }
+  - { section: 'filter:proxy-logging', option: 'use', value: 'egg:swift#proxy_logging' }
+  - { section: 'filter:bulk', option: 'use', value: 'egg:swift#bulk' }
+  - { section: 'filter:slo', option: 'use', value: 'egg:swift#slo' }
+  - { section: 'filter:dlo', option: 'use', value: 'egg:swift#dlo' }
+  - { section: 'filter:container-quotas', option: 'use', value: 'egg:swift#container_quotas' }
+  - { section: 'filter:account-quotas', option: 'use', value: 'egg:swift#account_quotas' }
+  - { section: 'filter:gatekeeper', option: 'use', value: 'egg:swift#gatekeeper' }
+  - { section: 'filter:container_sync', option: 'use', value: 'egg:swift#container_sync' }
+  - { section: 'filter:xprofile', option: 'use', value: 'egg:swift#xprofile' }
+  - { section: 'filter:versioned_writes', option: 'use', value: 'egg:swift#versioned_writes' }

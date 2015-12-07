@@ -7,13 +7,6 @@
     - lvm2
     - tgt
 
-- name: create cinder-volumes VG
-  lvg:
-    vg: cinder-volumes
-    state: present
-    pesize: 32
-    pvs: "{{ cinder_vg_pvs|join(',') }}"
-  
 - name: set vgscan filter
   lineinfile:
     dest: /etc/lvm/lvm.conf
@@ -21,6 +14,13 @@
     backrefs: yes
     line: \1[ {{ cinder_vg_pvs|map('basename')|join(',')|regex_replace('([^,]*)','"a/\1/"') }} ,"r/.*/"]
   notify: vgscan
+
+- name: create cinder-volumes VG
+  lvg:
+    vg: cinder-volumes
+    state: present
+    pesize: 32
+    pvs: "{{ cinder_vg_pvs|join(',') }}"
 
 - name: configure cinder lvm backend
   ini_file:

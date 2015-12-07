@@ -36,6 +36,8 @@
       tags: ['keystone']
     - role: cinder-controller
       tags: ['cinder','cinder-controller']
+    - role: swift-controller
+      tags: ['swift-controller']
     - role: reboot
       tags: ['reboot']
 

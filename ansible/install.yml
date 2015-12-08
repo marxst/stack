@@ -37,7 +37,7 @@
     - role: cinder-controller
       tags: ['cinder','cinder-controller']
     - role: swift-controller
-      tags: ['swift-controller']
+      tags: ['swift','swift-controller']
     - role: reboot
       tags: ['reboot']
 
@@ -67,6 +67,6 @@
     - role: cinder-lvm
       tags: ['cinder','cinder-lvm']
     - role: swift-fs
-      tags: ['swift-fs']
+      tags: ['swift','swift-fs']
 
 # vim: ft=ansible

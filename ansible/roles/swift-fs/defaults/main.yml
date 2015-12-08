@@ -1,0 +1,3 @@
+---
+swift_filesystem: xfs
+swift_root: /srv/node

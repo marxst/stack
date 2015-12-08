@@ -82,4 +82,10 @@
 
 - meta: flush_handlers
 
+- name: enable / start apache2 service
+  service:
+    name: apache2
+    enabled: '{{ apache2_enabled | default("yes") }}'
+    state: '{{ apache2_state | default("started") }}'
+
 - include: keystone-setup.yml

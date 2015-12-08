@@ -1,0 +1,3 @@
+---
+swift_rsync_listen: 127.0.0.1
+swift_root: /srv/node

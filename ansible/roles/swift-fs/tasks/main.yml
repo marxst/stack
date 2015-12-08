@@ -1,0 +1,29 @@
+---
+- name: install xfsprogs
+  apt:
+    name: xfsprogs
+    state: present
+
+- name: create swift root
+  file:
+    path: '{{ swift_root }}'
+    state: directory
+
+- name: Create XFS filesystem on swift disks
+  filesystem:
+    dev: '{{ item }}'
+    fstype: '{{ swift_filesystem }}'
+  with_items:
+    - '{{ swift_disks }}'
+
+- name: mount swift devices
+  mount:
+    state: mounted
+    src: '{{ item }}'
+    name: '{{ swift_root }}/{{ item|basename }}'
+    fstype: '{{ swift_filesystem }}'
+    opts: noatime,nodiratime,nobarrier,logbufs=8
+    dump: '0'
+    passno: '2'
+  with_items:
+    - '{{ swift_disks }}'

@@ -10,5 +10,5 @@ cinder_size: 2500GB
 cinder_vg_pvs:
   - '{{ raid1_dest_device }}'
 swift_disks:
-  - /dev/sdb2
+  - /dev/sda2
   - /dev/sdb2

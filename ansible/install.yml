@@ -57,7 +57,7 @@
         - '{{ disks }}'
 
     - name: create software raid
-      command: mdadm --create {{ raid1_dest_device }} --level=1 --raid-devices={{ raid1_src_devices|length }} {{ raid1_src_devices|join(' ') }}
+      command: mdadm --create {{ raid1_dest_device }} -e 1.2 --level=1 --raid-devices={{ raid1_src_devices|length }} {{ raid1_src_devices|join(' ') }}
       args:
         creates: '{{ raid1_dest_device }}'
 

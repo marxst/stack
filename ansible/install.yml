@@ -68,5 +68,7 @@
       tags: ['cinder','cinder-lvm']
     - role: swift-fs
       tags: ['swift','swift-fs']
+    - role: swift-storage
+      tags: ['swift','swift-storage']
 
 # vim: ft=ansible

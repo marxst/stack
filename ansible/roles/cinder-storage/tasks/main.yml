@@ -28,3 +28,10 @@
     state: absent
 
 - meta: flush_handlers
+
+- name: enable / start cinder-volume service
+  service:
+    name: cinder-volume
+    enabled: '{{ cinder_volume_enabled | default("yes") }}'
+    state: '{{ cinder_volume_state | default("started") }}'
+

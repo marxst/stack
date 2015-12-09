@@ -53,3 +53,15 @@
     state: absent
 
 - meta: flush_handlers
+
+- name: enable / start cinder-scheduler service
+  service:
+    name: cinder-scheduler
+    enabled: '{{ cinder_scheduler_enabled | default("yes") }}'
+    state: '{{ cinder_scheduler_state | default("started") }}'
+
+- name: enable / start cinder-api service
+  service:
+    name: cinder-api
+    enabled: '{{ cinder_api_enabled | default("yes") }}'
+    state: '{{ cinder_api_state | default("started") }}'

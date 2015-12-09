@@ -3,3 +3,68 @@
   service:
     name: rsync
     state: restarted
+
+- name: restart swift-account
+  service:
+    name: swift-account
+    state: restarted
+
+- name: restart swift-account-auditor
+  service:
+    name: swift-account-auditor
+    state: restarted
+
+- name: restart swift-account-reaper
+  service:
+    name: swift-account-reaper
+    state: restarted
+
+- name: restart swift-account-replicator
+  service:
+    name: swift-account-replicator
+    state: restarted
+
+- name: restart swift-container
+  service:
+    name: swift-container
+    state: restarted
+
+- name: restart swift-container-updater
+  service:
+    name: swift-container-updater
+    state: restarted
+
+- name: restart swift-container-auditor
+  service:
+    name: swift-container-auditor
+    state: restarted
+
+- name: restart swift-container-replicator
+  service:
+    name: swift-container-replicator
+    state: restarted
+
+- name: restart swift-container-sync
+  service:
+    name: swift-container-sync
+    state: restarted
+
+- name: restart swift-object
+  service:
+    name: swift-object
+    state: restarted
+
+- name: restart swift-object-auditor
+  service:
+    name: swift-object-auditor
+    state: restarted
+
+- name: restart swift-object-replicator
+  service:
+    name: swift-object-replicator
+    state: restarted
+
+- name: restart swift-object-updater
+  service:
+    name: swift-object-updater
+    state: restarted

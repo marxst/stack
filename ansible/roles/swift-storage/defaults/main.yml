@@ -1,3 +1,59 @@
 ---
+swift_account_listen: 127.0.0.1
+swift_container_listen: 127.0.0.1
+swift_object_listen: 127.0.0.1
 swift_rsync_listen: 127.0.0.1
 swift_root: /srv/node
+
+swift_account_config_base:
+  - { section: 'DEFAULT', option: 'bind_ip', value: '{{ swift_account_listen  }}' }
+  - { section: 'DEFAULT', option: 'bind_port', value: '6002' }
+  - { section: 'DEFAULT', option: 'user', value: 'swift' }
+  - { section: 'DEFAULT', option: 'swift_dir', value: '/etc/swift' }
+  - { section: 'DEFAULT', option: 'devices', value: '{{ swift_root }}' }
+  - { section: 'DEFAULT', option: 'mount_check', value: 'true' }
+  - { section: 'pipeline:main', option: 'pipeline', value: 'healthcheck recon account-server' }
+  - { section: 'app:account-server', option: 'use', value: 'egg:swift#account' }
+  - { section: 'filter:healthcheck', option: 'use', value: 'egg:swift#healthcheck' }
+  - { section: 'filter:recon', option: 'use', value: 'egg:swift#recon' }
+  - { section: 'filter:recon', option: 'recon_cache_path', value: '/var/cache/swift' }
+  - { section: 'account-replicator', option: '', value: '' }
+  - { section: 'account-auditor', option: '', value: '' }
+  - { section: 'account-reaper', option: '', value: '' }
+  - { section: 'filter:xprofile', option: 'use', value: 'egg:swift#xprofile' }
+swift_containter_config_base:
+  - { section: 'DEFAULT', option: 'bind_ip', value: '{{ swift_container_listen  }}' }
+  - { section: 'DEFAULT', option: 'bind_port', value: '6001' }
+  - { section: 'DEFAULT', option: 'user', value: 'swift' }
+  - { section: 'DEFAULT', option: 'swift_dir', value: '/etc/swift' }
+  - { section: 'DEFAULT', option: 'devices', value: '{{ swift_root }}' }
+  - { section: 'DEFAULT', option: 'mount_check', value: 'true' }
+  - { section: 'pipeline:main', option: 'pipeline', value: 'healthcheck recon container-server' }
+  - { section: 'app:container-server', option: 'use', value: 'egg:swift#container' }
+  - { section: 'filter:healthcheck', option: 'use', value: 'egg:swift#healthcheck' }
+  - { section: 'filter:recon', option: 'use', value: 'egg:swift#recon' }
+  - { section: 'filter:recon', option: 'recon_cache_path', value: '/var/cache/swift' }
+  - { section: 'container-replicator', option: '', value: '' }
+  - { section: 'container-auditor', option: '', value: '' }
+  - { section: 'container-updater', option: '', value: '' }
+  - { section: 'container-sync', option: '', value: '' }
+  - { section: 'filter:xprofile', option: 'use', value: 'egg:swift#xprofile' }
+swift_object_config_base:
+  - { section: 'DEFAULT', option: 'bind_ip', value: '{{ swift_object_listen  }}' }
+  - { section: 'DEFAULT', option: 'bind_port', value: '6000' }
+  - { section: 'DEFAULT', option: 'user', value: 'swift' }
+  - { section: 'DEFAULT', option: 'swift_dir', value: '/etc/swift' }
+  - { section: 'DEFAULT', option: 'devices', value: '{{ swift_root }}' }
+  - { section: 'DEFAULT', option: 'mount_check', value: 'true' }
+  - { section: 'pipeline:main', option: 'pipeline', value: 'healthcheck recon object-server' }
+  - { section: 'app:object-server', option: 'use', value: 'egg:swift#object' }
+  - { section: 'filter:healthcheck', option: 'use', value: 'egg:swift#healthcheck' }
+  - { section: 'filter:recon', option: 'use', value: 'egg:swift#recon' }
+  - { section: 'filter:recon', option: 'recon_cache_path', value: '/var/cache/swift' }
+  - { section: 'filter:recon', option: 'recon_lock_path', value: '/var/lock' }
+  - { section: 'object-replicator', option: '', value: '' }
+  - { section: 'container-auditor', option: '', value: '' }
+  - { section: 'object-reconstructor', option: '', value: '' }
+  - { section: 'object-updater', option: '', value: '' }
+  - { section: 'filter:xprofile', option: 'use', value: 'egg:swift#xprofile' }
+

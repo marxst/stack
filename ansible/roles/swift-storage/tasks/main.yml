@@ -18,6 +18,22 @@
     group: root
     mode: 0644
 
+- name: ensure swift-root directory permissions
+  file:
+    path: '{{ swift_root }}'
+    state: directory
+    owner: swift
+    group: swift
+    recurse: yes
+
+- name: create swift cache dir
+  file:
+    path: /var/cache/swift
+    state: directory
+    owner: root
+    group: swift
+    recurse: yes
+    
 - name: enable rsyncd
   lineinfile:
     dest: /etc/default/rsync
@@ -25,10 +41,144 @@
     line: RSYNC_ENABLE=true
   notify: restart rsync
 
+- name: swift account-server base configuration
+  ini_file:
+    dest: /etc/swift/account-server.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  no_log: true
+  with_items:
+    - '{{ swift_account_config_base + swift_account_config|default([]) }}'
+  notify:
+    - restart swift-account
+    - restart swift-account-auditor
+    - restart swift-account-reaper
+    - restart swift-account-replicator
+
+- name: swift container-server base configuration
+  ini_file:
+    dest: /etc/swift/container-server.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  no_log: true
+  with_items:
+    - '{{ swift_container_config_base + swift_container_config|default([]) }}'
+  notify:
+    - restart swift-container
+    - restart swift-account-auditor
+    - restart swift-account-replicator
+    - restart swift-account-sync
+    - restart swift-account-updater
+
+- name: swift object-server base configuration
+  ini_file:
+    dest: /etc/swift/object-server.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option }}'
+    value: '{{ item.value }}'
+  no_log: true
+  with_items:
+    - '{{ swift_object_config_base + swift_object_config|default([]) }}'
+  notify:
+    - restart swift-object
+    - restart swift-object-auditor
+    - restart swift-object-replicator
+    - restart swift-object-updater
+
 - meta: flush_handlers
 
+# TODO: refactoring necessary
 - name: enable / start rsync service
   service:
     name: rsync
     enabled: '{{ rsync_enabled | default("yes") }}'
     state: '{{ rsync_state | default("started") }}'
+
+- name: enable / start swift-account service
+  service:
+    name: swift-account
+    enabled: '{{ swift_account_enabled | default("yes") }}'
+    state: '{{ swift_account_state | default("started") }}'
+
+- name: enable / start swift-account-auditor service
+  service:
+    name: swift-account-auditor
+    enabled: '{{ swift_account_auditor_enabled | default("yes") }}'
+    state: '{{ swift_account_auditor_state | default("started") }}'
+
+- name: enable / start swift-account-reaper service
+  service:
+    name: swift-account-reaper
+    enabled: '{{ swift_account_reaper_enabled | default("yes") }}'
+    state: '{{ swift_account_reaper_state | default("started") }}'
+
+- name: enable / start swift-account-replicator service
+  service:
+    name: swift-account-replicator
+    enabled: '{{ swift_account_replicator_enabled | default("yes") }}'
+    state: '{{ swift_account_replicator_state | default("started") }}'
+
+- name: enable / start swift-container service
+  service:
+    name: swift-container
+    enabled: '{{ swift_container_enabled | default("yes") }}'
+    state: '{{ swift_container_state | default("started") }}'
+
+- name: enable / start swift-container-updater service
+  service:
+    name: swift-container-updater
+    enabled: '{{ swift_container_updater_enabled | default("yes") }}'
+    state: '{{ swift_container_updater_state | default("started") }}'
+
+- name: enable / start swift-container-auditor service
+  service:
+    name: swift-container-auditor
+    enabled: '{{ swift_container_auditor_enabled | default("yes") }}'
+    state: '{{ swift_container_auditor_state | default("started") }}'
+
+- name: enable / start swift-container-replicator service
+  service:
+    name: swift-container-replicator
+    enabled: '{{ swift_container_replicator_enabled | default("yes") }}'
+    state: '{{ swift_container_replicator_state | default("started") }}'
+
+- name: enable / start swift-container-sync service
+  service:
+    name: swift-container-sync
+    enabled: '{{ swift_container_sync_enabled | default("yes") }}'
+    state: '{{ swift_container_sync_state | default("started") }}'
+
+- name: enable / start swift-object service
+  service:
+    name: swift-object
+    enabled: '{{ swift_object_enabled | default("yes") }}'
+    state: '{{ swift_object_state | default("started") }}'
+
+- name: enable / start swift-object-auditor service
+  service:
+    name: swift-object-auditor
+    enabled: '{{ swift_object_auditor_enabled | default("yes") }}'
+    state: '{{ swift_object_auditor_state | default("started") }}'
+
+- name: enable / start swift-object-replicator service
+  service:
+    name: swift-object-replicator
+    enabled: '{{ swift_object_replicator_enabled | default("yes") }}'
+    state: '{{ swift_object_replicator_state | default("started") }}'
+
+- name: enable / start swift-object-updater service
+  service:
+    name: swift-object-updater
+    enabled: '{{ swift_object_updater_enabled | default("yes") }}'
+    state: '{{ swift_object_updater_state | default("started") }}'

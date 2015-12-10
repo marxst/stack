@@ -4,6 +4,9 @@ swift_container_listen: 127.0.0.1
 swift_object_listen: 127.0.0.1
 swift_rsync_listen: 127.0.0.1
 swift_root: /srv/node
+swift_partition_exponent: 10
+swift_replicas: '{{ swift_disks|length }}'
+swift_rebalance_limit: 1
 
 swift_account_config_base:
   - { section: 'DEFAULT', option: 'bind_ip', value: '{{ swift_account_listen  }}' }

@@ -37,7 +37,7 @@
 - name: enable rsyncd
   lineinfile:
     dest: /etc/default/rsync
-    regexp: ^#\s*RSYNC_ENABLE=
+    regexp: ^#*\s*RSYNC_ENABLE=.*$
     line: RSYNC_ENABLE=true
   notify: restart rsync
 
@@ -95,6 +95,8 @@
     - restart swift-object-auditor
     - restart swift-object-replicator
     - restart swift-object-updater
+
+- include: create-rings.yml
 
 - meta: flush_handlers
 

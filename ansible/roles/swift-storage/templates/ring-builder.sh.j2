@@ -1,0 +1,32 @@
+#!/bin/bash
+
+RC=0
+{% for builder in [['account.builder',6002],['container.builder',6001],['object.builder',6000]] %}
+{%   for host in groups['storage-nodes'] %}
+{%     set host_loop = loop %}
+{%     for disk in swift_disks %}
+swift-ring-builder /etc/swift/{{ builder[0] }} add \
+  --region 1 \
+  --zone {{ loop.index * host_loop.index }}\
+  --ip 127.0.0.1  \
+  --port {{ builder[1] }} \
+  --device {{ disk|basename }} \
+  --weight 100
+RET=$?
+if [ ${RET} -ne 0 ]; then
+  RC=${RET}
+fi
+{%     endfor %}
+{%   endfor %}
+if [ ${RC} -eq 0 ]; then
+  swift-ring-builder /etc/swift/{{ builder[0] }} rebalance
+  RET=$?
+  if [ ${RET} -ne 0 ]; then
+    RC=${RET}
+  fi
+fi
+{% endfor %}
+if [ ${RC} -eq 0 ]; then
+  touch /etc/swift/.rings_build
+fi
+exit ${RC}

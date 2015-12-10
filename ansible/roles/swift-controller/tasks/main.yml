@@ -25,8 +25,8 @@
     group: swift
     mode: 0644
     section: '{{ item.section }}'
-    option: '{{ item.option }}'
-    value: '{{ item.value }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
   no_log: true
   with_items:
     - '{{ swift_proxy_config_base + swift_proxy_config|default([]) }}'

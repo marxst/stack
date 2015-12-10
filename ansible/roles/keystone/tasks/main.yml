@@ -46,8 +46,8 @@
     group: root
     mode: 0644
     section: '{{ item.section }}'
-    option: '{{ item.option }}'
-    value: '{{ item.value }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
   no_log: true
   with_items:
     - '{{ keystone_base_config + keystone_config|default([]) }}'

@@ -14,8 +14,8 @@
     group: root
     mode: 0644
     section: '{{ item.section }}'
-    option: '{{ item.option }}'
-    value: '{{ item.value }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
   no_log: true
   with_items:
     - '{{ cinder_storage_base_config + cinder_storage_config|default([]) }}'

@@ -48,8 +48,8 @@
     group: root
     mode: 0644
     section: '{{ item.section }}'
-    option: '{{ item.option }}'
-    value: '{{ item.value }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
   no_log: true
   with_items:
     - '{{ swift_account_config_base + swift_account_config|default([]) }}'
@@ -66,8 +66,8 @@
     group: root
     mode: 0644
     section: '{{ item.section }}'
-    option: '{{ item.option }}'
-    value: '{{ item.value }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
   no_log: true
   with_items:
     - '{{ swift_container_config_base + swift_container_config|default([]) }}'
@@ -85,8 +85,8 @@
     group: root
     mode: 0644
     section: '{{ item.section }}'
-    option: '{{ item.option }}'
-    value: '{{ item.value }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
   no_log: true
   with_items:
     - '{{ swift_object_config_base + swift_object_config|default([]) }}'

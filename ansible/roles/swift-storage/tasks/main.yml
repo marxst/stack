@@ -96,6 +96,8 @@
     - restart swift-object-replicator
     - restart swift-object-updater
 
+- include: create-rings.yml
+
 - meta: flush_handlers
 
 # TODO: refactoring necessary

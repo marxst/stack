@@ -74,7 +74,6 @@
       delegate_to: '{{ item[1] }}'
       with_nested:
         - [ account.builder, container.builder, object.builder, account.ring.gz, container.ring.gz, object.ring.gz, .rings_build ]
-#        - [ account.ring.gz, container.ring.gz, object.ring.gz, .rings_build ]
         - "{{ groups['storage-nodes'] + groups['controller-nodes'] }}"
 
   run_once: true

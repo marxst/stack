@@ -10,6 +10,14 @@
     - swift-container
     - swift-object
 
+- name: create swift config directory
+  file:
+    state: directory
+    path: /etc/swift
+    owner: root
+    group: swift
+    mode: 0755
+
 - name: create rsyncd config
   template:
     src: rsyncd.conf.j2

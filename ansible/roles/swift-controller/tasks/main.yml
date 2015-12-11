@@ -18,6 +18,19 @@
     group: swift
     mode: 0755
 
+- name: swift configuration
+  ini_file:
+    dest: /etc/swift/swift.conf
+    owner: root
+    group: swift
+    mode: 0640
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ swift_config_base + swift_config|default([]) }}'
+
 - name: swift proxy-server configuration
   ini_file:
     dest: /etc/swift/proxy-server.conf

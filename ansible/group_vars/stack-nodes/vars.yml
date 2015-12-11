@@ -9,8 +9,8 @@ mysql_heat_password: '{{ vault_mysql_heat_password }}'
 mysql_murano_password: '{{ vault_mysql_murano_password }}'
 rabbitmq_openstack_password: '{{ vault_rabbitmq_openstack_password }}'
 metadata_proxy_shared_secret: '{{ vault_metadata_proxy_shared_secret }}'
-swift_hash_path_suffix: '{{ swift_hash_path_suffix }}'
-swift_hash_path_prefix: '{{ swift_hash_path_prefix }}'
+swift_hash_path_suffix: '{{ vault_swift_hash_path_suffix }}'
+swift_hash_path_prefix: '{{ vault_swift_hash_path_prefix }}'
 
 os_users:
   admin:

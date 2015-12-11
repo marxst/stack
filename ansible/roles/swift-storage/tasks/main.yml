@@ -41,6 +41,22 @@
     line: RSYNC_ENABLE=true
   notify: restart rsync
 
+- name: get swift.conf from controller
+  slurp:
+    src: /etc/swift/swift.conf
+  delegate_to: '{{ item }}'
+  register: swiftconf
+  with_items:
+    - "{{ groups['controller-nodes'] }}"
+
+- name: create swift.conf
+  copy:
+    dest: /etc/swift/swift.conf
+    content: '{{ swiftconf.content | b64decode }}'
+    owner: root
+    group: swift
+    mode: 0640
+
 - name: swift account-server base configuration
   ini_file:
     dest: /etc/swift/account-server.conf

@@ -148,6 +148,7 @@
     - container.ring.gz
     - object.ring.gz
     - swift.conf
+    - .rings_build
 
 - name: store ring/builder/swift.conf files
   copy:

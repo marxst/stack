@@ -67,3 +67,13 @@ swift_object_config_base:
   - { section: 'object-updater' }
   - { section: 'filter:xprofile', option: 'use', value: 'egg:swift#xprofile' }
 
+swift_files:
+  - account.builder
+  - container.builder
+  - object.builder
+  - account.ring.gz
+  - container.ring.gz
+  - object.ring.gz
+  - swift.conf
+  - .rings_build
+

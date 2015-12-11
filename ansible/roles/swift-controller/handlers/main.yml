@@ -1,4 +1,9 @@
 ---
+- name: decode swift files
+  shell: base64 -d /etc/swift/{{ item }}.b64 > /etc/swift/{{ item }}
+  with_items:
+    - '{{ swift_files }}'
+
 - name: restart swift-proxy
   service:
     name: swift-proxy

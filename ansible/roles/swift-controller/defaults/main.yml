@@ -1,4 +1,5 @@
 ---
+os_public_hostname: '{{ ansible_fqdn }}'
 swift_proxy_config_base:
   - { section: 'DEFAULT', option: 'bind_port', value: '8080' }
   - { section: 'DEFAULT', option: 'user', value: 'swift' }

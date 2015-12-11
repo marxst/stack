@@ -1,21 +1,8 @@
 ---
-- name: get swift ring status
-  stat:
-    path: /etc/swift/.rings_build
-  register: ring_builder
-
 - name: "TODO: fix ring-builder.sh multi node support"
   fail:
   when: groups['storage-nodes']|length > 1
 
-# this block will be run on ONE (random) storage node, IF
-# the file /etc/swift/.rings_build does not exist. The existence
-# of the file indicates that all rings have been build and
-# distributed. As the file itself will be distributed alongside
-# the rings, it should ensure that this process is only run ONCE
-# on ONE node
-# if the creation/distribution fails, the block will clean up
-# intermediate steps
 - block:
   - name: create builder files
     command: swift-ring-builder /etc/swift/{{ item }} create {{ swift_partition_exponent }} {{ swift_replicas }} {{ swift_rebalance_limit }}
@@ -39,43 +26,10 @@
     args:
       creates: /etc/swift/.rings_build
 
-  - name: get rings/builders
-    slurp:
-      src: /etc/swift/{{ item }}
-    register: rings
-    with_items:
-      - account.builder
-      - container.builder
-      - object.builder
-      - account.ring.gz
-      - container.ring.gz
-      - object.ring.gz
-      - .rings_build
-
-  - name: distribute rings/builders
-    copy:
-      content: '{{ item[0].content | b64decode }}'
-      dest: /etc/swift/{{ item[0].source | basename }}
-      owner: root
-      group: swift
-      mode: 0644
-    delegate_to: '{{ item[1] }}'
-    no_log: true
-    with_nested:
-      - "{{ rings.results }}"
-      - "{{ groups['storage-nodes'] + groups['controller-nodes'] }}"
-    when: inventory_hostname != item[1]
-
   rescue:
     - name: clean up after failure
       file:
-        path: /etc/swift/{{ item[0] }}
+        path: /etc/swift/{{ item }}
         state: absent
-      delegate_to: '{{ item[1] }}'
-      with_nested:
-        - [ account.builder, container.builder, object.builder, account.ring.gz, container.ring.gz, object.ring.gz, .rings_build ]
-#        - [ account.ring.gz, container.ring.gz, object.ring.gz, .rings_build ]
-        - "{{ groups['storage-nodes'] + groups['controller-nodes'] }}"
-
-  run_once: true
-  when: not ring_builder.stat.exists
+      with_items:
+        - [ account.builder, container.builder, object.builder, account.ring.gz, container.ring.gz, object.ring.gz ]

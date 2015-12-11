@@ -27,9 +27,9 @@ swift_account_config_base:
   - { section: 'filter:healthcheck', option: 'use', value: 'egg:swift#healthcheck' }
   - { section: 'filter:recon', option: 'use', value: 'egg:swift#recon' }
   - { section: 'filter:recon', option: 'recon_cache_path', value: '/var/cache/swift' }
-  - { section: 'account-replicator' }
-  - { section: 'account-auditor' }
-  - { section: 'account-reaper' }
+  - { section: 'account-replicator', option: 'None', value: 'None' }
+  - { section: 'account-auditor', option: 'None', value: 'None' }
+  - { section: 'account-reaper', option: 'None', value: 'None' }
   - { section: 'filter:xprofile', option: 'use', value: 'egg:swift#xprofile' }
 swift_container_config_base:
   - { section: 'DEFAULT', option: 'bind_ip', value: '{{ swift_container_listen  }}' }
@@ -43,10 +43,10 @@ swift_container_config_base:
   - { section: 'filter:healthcheck', option: 'use', value: 'egg:swift#healthcheck' }
   - { section: 'filter:recon', option: 'use', value: 'egg:swift#recon' }
   - { section: 'filter:recon', option: 'recon_cache_path', value: '/var/cache/swift' }
-  - { section: 'container-replicator', option: '', value: '' }
-  - { section: 'container-auditor' }
-  - { section: 'container-updater' }
-  - { section: 'container-sync' }
+  - { section: 'container-replicator', option: 'None', value: 'None' }
+  - { section: 'container-auditor', option: 'None', value: 'None' }
+  - { section: 'container-updater', option: 'None', value: 'None' }
+  - { section: 'container-sync', option: 'None', value: 'None' }
   - { section: 'filter:xprofile', option: 'use', value: 'egg:swift#xprofile' }
 swift_object_config_base:
   - { section: 'DEFAULT', option: 'bind_ip', value: '{{ swift_object_listen  }}' }
@@ -61,10 +61,10 @@ swift_object_config_base:
   - { section: 'filter:recon', option: 'use', value: 'egg:swift#recon' }
   - { section: 'filter:recon', option: 'recon_cache_path', value: '/var/cache/swift' }
   - { section: 'filter:recon', option: 'recon_lock_path', value: '/var/lock' }
-  - { section: 'object-replicator' }
-  - { section: 'container-auditor' }
-  - { section: 'object-reconstructor' }
-  - { section: 'object-updater' }
+  - { section: 'object-replicator', option: 'None', value: 'None' }
+  - { section: 'object-auditor', option: 'None', value: 'None' }
+  - { section: 'object-reconstructor', option: 'None', value: 'None' }
+  - { section: 'object-updater', option: 'None', value: 'None' }
   - { section: 'filter:xprofile', option: 'use', value: 'egg:swift#xprofile' }
 
 swift_files:

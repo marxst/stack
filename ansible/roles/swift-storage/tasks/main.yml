@@ -198,25 +198,19 @@
   delegate_to: '{{ ring_builder  }}' 
   register: rings
   with_items:
-    - account.builder
-    - container.builder
-    - object.builder
-    - account.ring.gz
-    - container.ring.gz
-    - object.ring.gz
-    - swift.conf
-    - .rings_build
+    - '{{ swift_files }}'
 
 - name: store ring/builder/swift.conf files
   copy:
-    content: '{{ item.content | b64decode }}'
-    dest: /etc/swift/{{ item.source | basename }}
+    content: '{{ item.content }}'
+    dest: /etc/swift/{{ item.source | basename }}.b64
     owner: root
     group: swift
     mode: 0644
   no_log: true
   with_items:
     - "{{ rings.results }}"
+  notify: decode swift files
 
 - meta: flush_handlers
 

@@ -81,10 +81,10 @@
     - '{{ swift_container_config_base + swift_container_config|default([]) }}'
   notify:
     - restart swift-container
-    - restart swift-account-auditor
-    - restart swift-account-replicator
-    - restart swift-account-sync
-    - restart swift-account-updater
+    - restart swift-container-auditor
+    - restart swift-container-replicator
+    - restart swift-container-sync
+    - restart swift-container-updater
 
 - name: swift object-server base configuration
   ini_file:

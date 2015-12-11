@@ -64,7 +64,6 @@
     with_nested:
       - "{{ rings.results }}"
       - "{{ groups['storage-nodes'] + groups['controller-nodes'] }}"
-    when: inventory_hostname != item[1]
 
   rescue:
     - name: clean up after failure

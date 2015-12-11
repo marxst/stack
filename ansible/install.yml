@@ -14,7 +14,7 @@
       tags: ['firewall']
 
 
-- name: set up controller node
+- name: set up controller node (phase 1)
   hosts: controller-nodes
   gather_facts: no
   become: yes
@@ -36,10 +36,6 @@
       tags: ['keystone']
     - role: cinder-controller
       tags: ['cinder','cinder-controller']
-    - role: swift-controller
-      tags: ['swift','swift-controller']
-    - role: reboot
-      tags: ['reboot']
 
 - name: set up storage nodes
   hosts: storage-nodes
@@ -70,5 +66,18 @@
       tags: ['swift','swift-fs']
     - role: swift-storage
       tags: ['swift','swift-storage']
+
+- name: set up controller node (phase 2)
+  hosts: controller-nodes
+  gather_facts: no
+  become: yes
+  tags:
+    - controller
+
+  roles:
+    - role: swift-controller
+      tags: ['swift','swift-controller']
+    - role: reboot
+      tags: ['reboot']
 
 # vim: ft=ansible

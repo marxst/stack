@@ -112,7 +112,53 @@
     - restart swift-object-replicator
     - restart swift-object-updater
 
-- include: create-rings.yml
+# initialize builders, rings and swift.conf on ONE node
+- block:
+  - name: set the ring builder node
+    set_fact:
+      ring_builder: '{{ inventory_hostname }}'
+
+  - include: create-rings.yml
+
+  - name: swift configuration
+    ini_file:
+      dest: /etc/swift/swift.conf
+      owner: root
+      group: swift
+      mode: 0640
+      section: '{{ item.section }}'
+      option: '{{ item.option|default(omit) }}'
+      value: '{{ item.value|default(omit) }}'
+    no_log: true
+    with_items:
+      - '{{ swift_config_base + swift_config|default([]) }}'
+
+  run_once: true
+
+- name: retrieve rings/builders/swift.conf from the ring_builder node
+  slurp:
+    src: /etc/swift/{{ item }}
+  delegate_to: '{{ ring_builder  }}' 
+  register: rings
+  with_items:
+    - account.builder
+    - container.builder
+    - object.builder
+    - account.ring.gz
+    - container.ring.gz
+    - object.ring.gz
+    - swift.conf
+
+- name: store ring/builder/swift.conf files
+  copy:
+    content: '{{ item.content | b64decode }}'
+    dest: /etc/swift/{{ item.source | basename }}
+    owner: root
+    group: swift
+    mode: 0644
+  no_log: true
+  with_items:
+    - "{{ rings.results }}"
 
 - meta: flush_handlers
 

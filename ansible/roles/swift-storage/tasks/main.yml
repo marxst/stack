@@ -163,7 +163,7 @@
     - '[filter:healthcheck]'
     - '[filter:recon]'
     - '[object-replicator]'
-    - '[container-auditor]'
+    - '[object-auditor]'
     - '[object-reconstructor]'
     - '[object-updater]'
     - '[filter:xprofile]'

@@ -67,6 +67,27 @@
     - restart swift-account-reaper
     - restart swift-account-replicator
 
+# workarount because ini_file tasks remove empty sections
+# and they _must_ be there
+- name: force empty account-server ini sections
+  lineinfile:
+    dest: /etc/swift/account-server.conf
+    line: '{{ item }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - '[DEFAULT]'
+    - '[pipeline:main]'
+    - '[app:account-server]'
+    - '[filter:healthcheck]'
+    - '[filter:recon]'
+    - '[account-replicator]'
+    - '[account-auditor]'
+    - '[account-reaper]'
+    - '[filter:xprofile]'
+  changed_when: false
+
 - name: swift container-server base configuration
   ini_file:
     dest: /etc/swift/container-server.conf
@@ -86,6 +107,28 @@
     - restart swift-account-sync
     - restart swift-account-updater
 
+# workarount because ini_file tasks remove empty sections
+# and they _must_ be there
+- name: force empty account-server ini sections
+  lineinfile:
+    dest: /etc/swift/container-server.conf
+    line: '{{ item }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - '[DEFAULT]'
+    - '[pipeline:main]'
+    - '[app:container-server]'
+    - '[filter:healthcheck]'
+    - '[filter:recon]'
+    - '[container-replicator]'
+    - '[container-auditor]'
+    - '[container-updater]'
+    - '[container-sync]'
+    - '[filter:xprofile]'
+  changed_when: false
+
 - name: swift object-server base configuration
   ini_file:
     dest: /etc/swift/object-server.conf
@@ -103,6 +146,28 @@
     - restart swift-object-auditor
     - restart swift-object-replicator
     - restart swift-object-updater
+
+# workarount because ini_file tasks remove empty sections
+# and they _must_ be there
+- name: force empty account-server ini sections
+  lineinfile:
+    dest: /etc/swift/object-server.conf
+    line: '{{ item }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - '[DEFAULT]'
+    - '[pipeline:main]'
+    - '[app:object-server]'
+    - '[filter:healthcheck]'
+    - '[filter:recon]'
+    - '[object-replicator]'
+    - '[container-auditor]'
+    - '[object-reconstructor]'
+    - '[object-updater]'
+    - '[filter:xprofile]'
+  changed_when: false
 
 # initialize builders, rings and swift.conf on ONE node
 - block:

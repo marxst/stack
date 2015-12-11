@@ -53,7 +53,7 @@
   ini_file:
     dest: /etc/swift/account-server.conf
     owner: root
-    group: root
+    group: swift
     mode: 0644
     section: '{{ item.section }}'
     option: '{{ item.option|default(omit) }}'
@@ -71,7 +71,7 @@
   ini_file:
     dest: /etc/swift/container-server.conf
     owner: root
-    group: root
+    group: swift
     mode: 0644
     section: '{{ item.section }}'
     option: '{{ item.option|default(omit) }}'
@@ -90,7 +90,7 @@
   ini_file:
     dest: /etc/swift/object-server.conf
     owner: root
-    group: root
+    group: swift
     mode: 0644
     section: '{{ item.section }}'
     option: '{{ item.option|default(omit) }}'

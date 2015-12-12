@@ -77,6 +77,8 @@
   roles:
     - role: swift-controller
       tags: ['swift','swift-controller']
+    - role: glance
+      tags: ['glance']
     - role: reboot
       tags: ['reboot']
 

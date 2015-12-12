@@ -65,6 +65,19 @@
     - role: swift-storage
       tags: ['swift','swift-storage']
 
+- name: set up compute nodes
+  hosts: compute-nodes
+  gather_facts: no
+  become: yes
+  tags:
+    - compute
+
+  roles:
+    - role: nova-compute
+      tags: ['nova','nova-compute']
+    - role: reboot
+      tags: ['reboot']
+
 - name: set up controller node (phase 2)
   hosts: controller-nodes
   gather_facts: no

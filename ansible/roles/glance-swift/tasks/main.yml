@@ -1,0 +1,32 @@
+---
+- name: glance swift backend base configuration
+  ini_file:
+    dest: /etc/glance/glance-api.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ glance_swift_config_base + glance_swift_config|default([]) }}'
+  notify:
+    - restart glance-api
+
+- name: glance swift store base configuration
+  ini_file:
+    dest: /etc/glance/swift-backend.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ glance_swift_store_congfig_base + glance_swift_store_congfig|default([]) }}'
+  notify:
+    - restart glance-api
+
+- meta: flush_handlers

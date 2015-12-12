@@ -1,0 +1,14 @@
+---
+glance_swift_config_base:
+  - { section: 'glance_store', option: 'stores', value: 'swift' }
+  - { section: 'glance_store', option: 'default_store', value: 'swift' }
+  - { section: 'glance_store', option: 'swift_store_config_file', value: '/etc/glance/swift-backend.conf'  }
+  - { section: 'glance_store', option: 'swift_store_create_container_on_put', value: 'true' }
+
+glance_swift_store_congfig_base:
+  - { section: 'ref1', option: 'user', value: 'service:glance' }
+  - { section: 'ref1', option: 'key', value: '{{ os_users.glance.password }}' }
+  - { section: 'ref1', option: 'user_domain_id', value: 'default' }
+  - { section: 'ref1', option: 'project_domain_id', value: 'default' }
+  - { section: 'ref1', option: 'auth_version', value: '3' }
+  - { section: 'ref1', option: 'auth_address', value: 'http://localhost:5000/v3' }

@@ -9,6 +9,7 @@ packages_base:
   - { name: screen }
   - { name: telnet }
   - { name: tcpdump }
+  - { name: tmpreaper }
   - { name: unattended-upgrades }
   - { name: vim }
   - { name: bc }

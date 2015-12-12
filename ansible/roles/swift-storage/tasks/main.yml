@@ -40,7 +40,7 @@
     state: directory
     owner: root
     group: swift
-    recurse: yes
+    mode: 0770
     
 - name: enable rsyncd
   lineinfile:

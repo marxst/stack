@@ -98,6 +98,8 @@
       tags: ['glance','glance-swift']
     - role: nova-controller
       tags: ['nova','nova-controller']
+    - role: neutron-controller
+      tags: ['neutron','neutron-controller']
     - role: horizon
       tags: ['horizon']
     - role: reboot

@@ -1,0 +1,9 @@
+---
+- name: neutron db_sync
+  command: neutron-db-manage --config-file /etc/neutron/neutron.conf upgrade head
+  become_user: neutron
+
+- name: restart neutron-server
+  service:
+    name: neutron-server
+    state: restarted

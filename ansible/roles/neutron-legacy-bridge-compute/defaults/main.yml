@@ -1,0 +1,11 @@
+---
+os_public_hostname: '{{ ansible_fqdn }}'
+
+ml2_bridge_compute_config_base:
+  - { section: 'linux_bridge', option: 'physical_interface_mappings', value: 'public:eth0' }
+  - { section: 'vxlan', option: 'enable_vxlan', value: 'True' }
+  - { section: 'vxlan', option: 'local_ip', value: '127.0.0.1' }
+  - { section: 'vxlan', option: 'l2_population', value: 'True' }
+  - { section: 'agent', option: 'prevent_arp_spoofing', value: 'True' }
+  - { section: 'securitygroup', option: 'enable_security_group', value: 'True' }
+  - { section: 'securitygroup', option: 'firewall_driver', value: 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver' }

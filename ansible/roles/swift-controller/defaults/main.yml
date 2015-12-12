@@ -17,7 +17,7 @@ swift_proxy_config_base:
   - { section: 'filter:authtoken', option: 'user_domain_id', value: 'default' }
   - { section: 'filter:authtoken', option: 'project_name', value: 'service' }
   - { section: 'filter:authtoken', option: 'username', value: 'swift' }
-  - { section: 'filter:authtoken', option: 'password', value: '{ os_users.swift.password }}' }
+  - { section: 'filter:authtoken', option: 'password', value: '{{ os_users.swift.password }}' }
   - { section: 'filter:authtoken', option: 'delay_auth_decision', value: 'True' }
   - { section: 'filter:cache', option: 'use', value: 'egg:swift#memcache' }
   - { section: 'filter:cache', option: 'memcache_servers', value: '127.0.0.1:11211' }

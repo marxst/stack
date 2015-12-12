@@ -1,0 +1,29 @@
+---
+os_mgmt_iface: eth0
+os_public_hostname: '{{ ansible_fqdn  }}'
+glance_api_config_base:
+  - { section: 'DEFAULT', option: 'notification_driver', value: 'noop' }
+  - { section: 'keystone_authtoken', option: 'auth_uri', value: 'http://{{ os_public_hostname }}:5000' }
+  - { section: 'keystone_authtoken', option: 'auth_url', value: 'http://{{ os_public_hostname }}:35357' }
+  - { section: 'keystone_authtoken', option: 'auth_plugin', value: 'password' }
+  - { section: 'keystone_authtoken', option: 'project_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'user_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'project_name', value: 'service' }
+  - { section: 'keystone_authtoken', option: 'username', value: 'glance' }
+  - { section: 'keystone_authtoken', option: 'password', value: '{{ os_users.glance.password }}' }
+  - { section: 'database', option: 'connection' , value: 'mysql+pymysql://glance:{{ mysql_glance_password }}@localhost/glance' }
+  - { section: 'paste_deploy', option: 'flavor', value: 'keystone' }
+
+glance_registry_config_base:
+  - { section: 'DEFAULT', option: 'notification_driver', value: 'noop' }
+  - { section: 'keystone_authtoken', option: 'auth_uri', value: 'http://{{ os_public_hostname }}:5000' }
+  - { section: 'keystone_authtoken', option: 'auth_url', value: 'http://{{ os_public_hostname }}:35357' }
+  - { section: 'keystone_authtoken', option: 'auth_plugin', value: 'password' }
+  - { section: 'keystone_authtoken', option: 'project_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'user_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'project_name', value: 'service' }
+  - { section: 'keystone_authtoken', option: 'username', value: 'glance' }
+  - { section: 'keystone_authtoken', option: 'password', value: '{{ os_users.glance.password }}' }
+  - { section: 'database', option: 'connection' , value: 'mysql+pymysql://glance:{{ mysql_glance_password }}@localhost/glance' }
+  - { section: 'paste_deploy', option: 'flavor', value: 'keystone' }
+

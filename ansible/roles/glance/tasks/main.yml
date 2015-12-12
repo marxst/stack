@@ -1,0 +1,79 @@
+---
+- name: install glance
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - glance
+    - python-glanceclient
+
+- name: create glance DB
+  mysql_db:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: glance
+
+- name: create glance DB user
+  mysql_user:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: glance
+    password: '{{ mysql_glance_password }}'
+    host: '{{ item }}'
+    priv: glance.*:ALL
+  with_items:
+    - localhost
+    - '%'
+
+- name: glance-api base configuration
+  ini_file:
+    dest: /etc/glance/glance-api.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ glance_api_config_base + glance_api_config|default([]) }}'
+  notify:
+    - glance db_sync
+    - restart glance-api
+
+- name: glance-registry base configuration
+  ini_file:
+    dest: /etc/glance/glance-registry.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ glance_registry_config_base + glance_registry_config|default([]) }}'
+  notify:
+    - glance db_sync
+    - restart glance-registry
+
+- name: enable / start glance-api service
+  service:
+    name: glance-api
+    enabled: '{{ glance_api_enabled | default("yes") }}'
+    state: '{{ glance_api_state | default("started") }}'
+
+- name: enable / start glance-registry service
+  service:
+    name: glance-registry
+    enabled: '{{ glance_registry_enabled | default("yes") }}'
+    state: '{{ glance_registry_state | default("started") }}'
+
+- name: Remove unnecessary glance sqlite db
+  file:
+    path: /var/lib/glance/glance.sqlite
+    state: absent
+
+- meta: flush_handlers

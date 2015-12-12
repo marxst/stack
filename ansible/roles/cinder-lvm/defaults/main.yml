@@ -3,7 +3,7 @@ cinder_vg_pvs:
   - /dev/sda
   - /dev/sdb
 
-cinder_lvm_base_config:
+cinder_lvm_config_base:
   - { section: 'DEFAULT', option: 'enabled_backends', value: 'lvm' }
   - { section: 'lvm', option: 'volume_driver', value: 'cinder.volume.drivers.lvm.LVMVolumeDriver' }
   - { section: 'lvm', option: 'volume_group', value: 'cinder-volumes' }

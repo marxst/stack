@@ -50,7 +50,7 @@
     value: '{{ item.value|default(omit) }}'
   no_log: true
   with_items:
-    - '{{ keystone_base_config + keystone_config|default([]) }}'
+    - '{{ keystone_config_base + keystone_config|default([]) }}'
   notify: keystone db_sync
 
 - name: add apache2 keystone wsgi configuration

@@ -1,0 +1,101 @@
+---
+- name: install nova controller components
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - nova-api
+    - nova-cert
+    - nova-conductor
+    - nova-consoleauth
+    - nova-novncproxy
+    - nova-scheduler
+    - python-novaclient
+
+- name: create nova DB
+  mysql_db:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: nova
+  notify: nova db_sync
+
+- name: create nova DB user
+  mysql_user:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: nova
+    password: '{{ mysql_nova_password }}'
+    host: '{{ item }}'
+    priv: nova.*:ALL
+  with_items:
+    - localhost
+    - '%'
+  notify: nova db_sync
+
+- name: nova control base configuration
+  ini_file:
+    dest: /etc/nova/nova.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ nova_control_config_base + nova_control_config|default([]) }}'
+  notify:
+    - nova db_sync
+    - restart nova-api
+    - restart nova-cert
+    - restart nova-consoleauth
+    - restart nova-scheduler
+    - restart nova-conductor
+    - restart nova-novncproxy
+
+- meta: flush_handlers
+
+# TODO: refactoring necessary
+- name: enable / start nova-api service
+  service:
+    name: nova-api
+    enabled: '{{ nova_api_enabled | default("yes") }}'
+    state: '{{ nova_api_state | default("started") }}'
+
+- name: enable / start nova-cert service
+  service:
+    name: nova-cert
+    enabled: '{{ nova_cert_enabled | default("yes") }}'
+    state: '{{ nova_cert_state | default("started") }}'
+
+- name: enable / start nova-consoleauth service
+  service:
+    name: nova-consoleauth
+    enabled: '{{ nova_consoleauth_enabled | default("yes") }}'
+    state: '{{ nova_consoleauth_state | default("started") }}'
+
+- name: enable / start nova-scheduler service
+  service:
+    name: nova-scheduler
+    enabled: '{{ nova_scehduler_enabled | default("yes") }}'
+    state: '{{ nova_scheduler_state | default("started") }}'
+
+- name: enable / start nova-conductor service
+  service:
+    name: nova-conductor
+    enabled: '{{ nova_conductor_enabled | default("yes") }}'
+    state: '{{ nova_conductor_state | default("started") }}'
+
+- name: enable / start nova-novncproxy service
+  service:
+    name: nova-novncproxy
+    enabled: '{{ nova_novncproxy_enabled | default("yes") }}'
+    state: '{{ nova_novncproxy_state | default("started") }}'
+
+- name: Remove unnecessary nova sqlite db
+  file:
+    path: /var/lib/nova/nova.sqlite
+    state: absent
+

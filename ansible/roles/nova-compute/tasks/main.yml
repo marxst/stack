@@ -1,0 +1,69 @@
+---
+- name: install nova compute components
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - nova-compute
+    - sysfsutils
+
+- name: nova compute configuration
+  ini_file:
+    dest: /etc/nova/nova.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ nova_compute_config_base + nova_compute_config|default([]) }}'
+  notify: restart nova-compute
+
+- name: check KVM support
+  command: egrep '(vmx|svm)' /proc/cpuinfo
+  register: kvm_support
+  failed_when: false
+  changed_when: false
+
+- name: set nova compute virt_type to qemu
+  ini_file:
+    dest: /etc/nova/nova.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: 'libvirt'
+    option: 'virt_type'
+    value: 'qemu'
+  when: kvm_support.rc != 0
+  notify: restart nova-compute
+
+- name: Remove unnecessary nova sqlite db
+  file:
+    path: /var/lib/nova/nova.sqlite
+    state: absent
+
+- name: base libvirt configuration
+  template:
+    dest: /etc/libvirt/qemu.conf
+    src: qemu.conf.j2
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart libvirt-bin
+
+- meta: flush_handlers
+
+- name: enable / start nova-compute service
+  service:
+    name: nova-compute
+    enabled: '{{ nova_compute_enabled | default("yes") }}'
+    state: '{{ nova_compute_state | default("started") }}'
+
+- name: enable / start libvirt-bin service
+  service:
+    name: libvirt-bin
+    enabled: '{{ libvirt_bin_enabled | default("yes") }}'
+    state: '{{ libvirt_bin_state | default("started") }}'
+

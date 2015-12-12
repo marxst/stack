@@ -64,6 +64,21 @@
       tags: ['swift','swift-fs']
     - role: swift-storage
       tags: ['swift','swift-storage']
+    - role: reboot
+      tags: ['reboot',reboot-storage']
+
+- name: set up compute nodes
+  hosts: compute-nodes
+  gather_facts: no
+  become: yes
+  tags:
+    - compute
+
+  roles:
+    - role: nova-compute
+      tags: ['nova','nova-compute']
+    - role: reboot
+      tags: ['reboot',reboot-compute']
 
 - name: set up controller node (phase 2)
   hosts: controller-nodes
@@ -81,9 +96,11 @@
       tags: ['glance']
     - role: glance-swift
       tags: ['glance','glance-swift']
+    - role: nova-controller
+      tags: ['nova','nova-controller']
     - role: horizon
       tags: ['horizon']
     - role: reboot
-      tags: ['reboot']
+      tags: ['reboot','reboot-controller']
 
 # vim: ft=ansible

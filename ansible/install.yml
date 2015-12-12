@@ -34,10 +34,6 @@
       tags: ['os_common']
     - role: keystone
       tags: ['keystone']
-    - role: cinder-controller
-      tags: ['cinder','cinder-controller']
-    - role: horizon
-      tags: ['horizon']
 
 - name: set up storage nodes
   hosts: storage-nodes
@@ -77,12 +73,16 @@
     - controller
 
   roles:
+    - role: cinder-controller
+      tags: ['cinder','cinder-controller']
     - role: swift-controller
       tags: ['swift','swift-controller']
     - role: glance
       tags: ['glance']
     - role: glance-swift
       tags: ['glance','glance-swift']
+    - role: horizon
+      tags: ['horizon']
     - role: reboot
       tags: ['reboot']
 

@@ -6,7 +6,7 @@
     line: '{{ item.option  }} {{ item.value }}'
     state: present
   with_items:
-    - '{{ sshd_base_config + sshd_config|default([]) }}'
+    - '{{ sshd_config_base + sshd_config|default([]) }}'
   notify: restart sshd
 
 - name: disable automatic apt recommends

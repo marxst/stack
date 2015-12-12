@@ -41,7 +41,7 @@
     value: '{{ item.value|default(omit) }}'
   no_log: true
   with_items:
-    - '{{ cinder_control_base_config + cinder_control_config|default([]) }}'
+    - '{{ cinder_control_config_base + cinder_control_config|default([]) }}'
   notify:
     - cinder db_sync
     - restart cinder-scheduler

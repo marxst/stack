@@ -1,5 +1,5 @@
 ---
-sshd_base_config:
+sshd_config_base:
   - { option: 'PermitEmptyPasswords', value: 'no'  }
   - { option: 'PasswordAuthentication', value: 'no'  }
   - { option: 'PermitRootLogin', value: 'without-password'  }

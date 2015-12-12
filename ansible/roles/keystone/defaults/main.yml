@@ -1,6 +1,6 @@
 ---
 os_public_hostname: '{{ ansible_fqdn }}'
-keystone_base_config:
+keystone_config_base:
   - { section: 'DEFAULT', option: 'admin_token', value: '{{ os_admin_token }}' }
   - { section: 'database', option: 'connection' , value: 'mysql+pymysql://keystone:{{ mysql_keystone_password }}@localhost/keystone' }
   - { section: 'memcache', option: 'servers' , value: 'localhost:11211' }

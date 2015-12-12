@@ -1,7 +1,7 @@
 ---
 os_mgmt_iface: eth0
 os_public_hostname: '{{ ansible_fqdn  }}'
-cinder_control_base_config:
+cinder_control_config_base:
   - { section: 'database', option: 'connection', value: 'mysql+pymysql://cinder:{{ mysql_cinder_password }}@localhost/cinder' }
   - { section: 'DEFAULT', option: 'rpc_backend', value: 'rabbit' }
   - { section: 'oslo_messaging_rabbit', option: 'rabbit_host', value: 'localhost' }

@@ -33,7 +33,7 @@
     value: '{{ item.value|default(omit) }}'
   no_log: true
   with_items:
-    - '{{ cinder_lvm_base_config + cinder_lvm_config|default([]) }}'
+    - '{{ cinder_lvm_config_base + cinder_lvm_config|default([]) }}'
   notify:
     - restart tgt
     - restart cinder-volume

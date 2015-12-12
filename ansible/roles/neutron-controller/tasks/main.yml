@@ -1,0 +1,60 @@
+---
+
+- name: install neutron
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - neutron-server
+    - python-neutronclient
+
+- name: create neutron DB
+  mysql_db:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: neutron
+  notify: neutron db_sync
+
+- name: create neutron DB user
+  mysql_user:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: neutron
+    password: '{{ mysql_neutron_password }}'
+    host: '{{ item }}'
+    priv: neutron.*:ALL
+  with_items:
+    - localhost
+    - '%'
+  notify: neutron db_sync
+
+- name: neutron base configuration
+  ini_file:
+    dest: /etc/neutron/neutron.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ neutron_control_config_base + neutron_control_config|default([]) }}'
+  notify:
+    - neutron db_sync
+    - restart neutron-server
+
+- meta: flush_handlers
+
+- name: enable / start neutron-server service
+  service:
+    name: neutron-server
+    enabled: '{{ neutron_server_enabled | default("yes") }}'
+    state: '{{ neutron_server_state | default("started") }}'
+
+- name: Remove unnecessary neutron sqlite db
+  file:
+    path: /var/lib/neutron/neutron.db
+    state: absent

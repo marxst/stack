@@ -34,4 +34,13 @@
 
 - meta: flush_handlers
 
+- name: enable tmpreaper
+  lineinfile:
+    dest: /etc/tmpreaper.conf
+    rexexp: ^#*\s*SHOWWARNING\s*=.*$
+    line: SHOWWARNING=false
+    owner: root
+    group: root
+    mode: 0644
+
 # vim: ft=ansible

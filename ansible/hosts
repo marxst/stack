@@ -3,9 +3,14 @@ stack.chaosmoon.net
 
 [stack-nodes:children]
 controller-nodes
+storage-nodes
+compute-nodes
 
 [controller-nodes:children]
 all-in-one-node
 
 [storage-nodes:children]
+all-in-one-node
+
+[compute-nodes:children]
 all-in-one-node

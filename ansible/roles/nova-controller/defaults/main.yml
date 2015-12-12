@@ -1,0 +1,39 @@
+---
+os_public_hostname: '{{ ansible_fqdn }}'
+nova_control_config_base:
+  - { section: 'database', option: 'connection', value: 'mysql+pymysql://nova:{{ mysql_nova_password }}@localhost/nova' }
+  - { section: 'DEFAULT', option: 'rpc_backend', value: 'rabbit' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_host', value: '{{ os_public_hostname }}' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_userid', value: 'openstack' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_password', value: '{{ rabbitmq_openstack_password }}' }
+  - { section: 'DEFAULT', option: 'auth_strategy', value: 'keystone' }
+  - { section: 'keystone_authtoken', option: 'auth_uri', value: 'http://{{ os_public_hostname }}:5000' }
+  - { section: 'keystone_authtoken', option: 'auth_url', value: 'http://{{ os_public_hostname }}:35357' }
+  - { section: 'keystone_authtoken', option: 'auth_plugin', value: 'password' }
+  - { section: 'keystone_authtoken', option: 'project_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'user_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'project_name', value: 'service' }
+  - { section: 'keystone_authtoken', option: 'username', value: 'nova' }
+  - { section: 'keystone_authtoken', option: 'password', value: '{{ os_users.nova.password }}' }
+  - { section: 'DEFAULT', option: 'network_api_class' , value: 'nova.network.neutronv2.api.API' }
+  - { section: 'DEFAULT', option: 'security_group_api' , value: 'neutron' }
+  - { section: 'DEFAULT', option: 'linuxnet_interface_driver' , value: 'nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver' }
+  - { section: 'DEFAULT', option: 'firewall_driver' , value: 'nova.virt.firewall.NoopFirewallDriver' }
+  - { section: 'DEFAULT', option: 'my_ip' , value: '{{ ansible_default_ipv4.address }}' }
+  - { section: 'vnc', option: 'vncserver_listen' , value: '$my_ip' }
+  - { section: 'vnc', option: 'vncserver_proxyclient_address' , value: '$my_ip' }
+  - { section: 'glance', option: 'host' , value: '{{ os_public_hostname }}' }
+  - { section: 'oslo_concurrency', option: 'lock_path' , value: '/var/lib/nova/tmp' }
+  - { section: 'DEFAULT', option: 'enabled_apis' , value: 'osapi_compute,metadata' }
+  - { section: 'cinder', option: 'os_region_name', value: 'RegionOne'}
+  - { section: 'neutron', option: 'url' , value: 'http://{{ os_public_hostname }}:9696' }
+  - { section: 'neutron', option: 'auth_url' , value: 'http://{{ os_public_hostname }}:35357' }
+  - { section: 'neutron', option: 'auth_plugin' , value: 'password' }
+  - { section: 'neutron', option: 'project_domain_id', value: 'default' }
+  - { section: 'neutron', option: 'user_domain_id', value: 'default' }
+  - { section: 'neutron', option: 'region_name', value: 'RegionOne'}
+  - { section: 'neutron', option: 'project_name', value: 'service' }
+  - { section: 'neutron', option: 'username', value: 'neutron' }
+  - { section: 'neutron', option: 'password', value: '{{ os_users.neutron.password }}' }
+  - { section: 'neutron', option: 'service_metadata_proxy', value: 'True' }
+  - { section: 'neutron', option: 'metadata_proxy_shared_secret', value: '{{ metadata_proxy_shared_secret }}' }

@@ -81,6 +81,8 @@
       tags: ['glance']
     - role: glance-swift
       tags: ['glance','glance-swift']
+    - role: nova-controller
+      tags: ['nova','nova-controller']
     - role: horizon
       tags: ['horizon']
     - role: reboot

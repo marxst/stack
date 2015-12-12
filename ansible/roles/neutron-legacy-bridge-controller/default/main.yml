@@ -1,0 +1,45 @@
+---
+os_public_hostname: {{ ansible_fqdn }}
+
+neutron_ml2_config_base:
+  - { section: 'DEFAULT', option: 'core_plugin', value: 'ml2' }
+  - { section: 'DEFAULT', option: 'service_plugins', value: 'router' }
+  - { section: 'DEFAULT', option: 'allow_overlapping_ips', value: 'True' }
+ml2_plugin_config_base:
+  - { section: 'ml2', option: 'type_drivers', value: 'flat,vlan,vxlan' }
+  - { section: 'ml2', option: 'tenant_network_types', value: 'vxlan' }
+  - { section: 'ml2', option: 'mechanism_drivers', value: 'linuxbridge,l2population' }
+  - { section: 'ml2', option: 'extension_drivers', value: 'port_security' }
+  - { section: 'ml2_type_flat', option: 'flat_networks', value: 'public' }
+  - { section: 'ml2_type_vxlan', option: 'vni_ranges', value: '1:1000' }
+  - { section: 'securitygroup', option: 'enable_ipset', value: 'True' }
+ml2_bridge_config_base:
+  - { section: 'linux_bridge', option: 'physical_interface_mappings', value: 'public:eth0' }
+  - { section: 'vxlan', option: 'enable_vxlan', value: 'True' }
+  - { section: 'vxlan', option: 'local_ip', value: '127.0.0.1' }
+  - { section: 'vxlan', option: 'l2_population', value: 'True' }
+  - { section: 'agent', option: 'prevent_arp_spoofing', value: 'True' }
+  - { section: 'securitygroup', option: 'enable_security_group', value: 'True' }
+  - { section: 'securitygroup', option: 'firewall_driver', value: 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver' }
+neutron_layer3_config_base:
+  - { section: 'DEFAULT', option: 'interface_driver', value: 'neutron.agent.linux.interface.BridgeInterfaceDriver' }
+  - { section: 'DEFAULT', option: 'external_network_bridge', value: '' }
+neutron_dhcp_config_base:
+  - { section: 'DEFAULT', option: 'interface_driver', value: 'neutron.agent.linux.interface.BridgeInterfaceDriver' }
+  - { section: 'DEFAULT', option: 'dhcp_driver', value: 'neutron.agent.linux.dhcp.Dnsmasq' }
+  - { section: 'DEFAULT', option: 'enable_isolated_metadata', value: 'True' }
+  - { section: 'DEFAULT', option: 'dnsmasq_config_file', value: '/etc/neutron/dnsmasq-neutron.conf' }
+neutron_metadata_config_base:
+  - { section: 'DEFAULT', option: 'auth_uri', value: 'http://{{ os_public_hostname }}:5000' }
+  - { section: 'DEFAULT', option: 'auth_url', value: 'http://{{ os_public_hostname }}:35357' }
+  - { section: 'DEFAULT', option: 'auth_plugin', value: 'password' }
+  - { section: 'DEFAULT', option: 'auth_region', value: 'ReqgionOne' }
+  - { section: 'DEFAULT', option: 'project_domain_id', value: 'default' }
+  - { section: 'DEFAULT', option: 'user_domain_id', value: 'default' }
+  - { section: 'DEFAULT', option: 'project_name', value: 'service' }
+  - { section: 'DEFAULT', option: 'username', value: 'neutron' }
+  - { section: 'DEFAULT', option: 'password', value: '{{ os_users.neutron.password }}' }
+  - { section: 'DEFAULT', option: 'nova_metadata_ip', value: '{{ os_public_hostname }}' }
+  - { section: 'DEFAULT', option: 'metadata_proxy_shared_secret', value: '{{ metadata_proxy_shared_secret }}' }
+neutron_dnsmasq_config_base:
+  - { option: 'dhcp-option-force', value: '26,1450' }

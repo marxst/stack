@@ -36,6 +36,8 @@
       tags: ['keystone']
     - role: cinder-controller
       tags: ['cinder','cinder-controller']
+    - role: horizon
+      tags: ['horizon']
 
 - name: set up storage nodes
   hosts: storage-nodes

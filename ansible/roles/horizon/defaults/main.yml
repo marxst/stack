@@ -1,0 +1,2 @@
+---
+os_public_hostname: '{{ ansible_fqdn }}'

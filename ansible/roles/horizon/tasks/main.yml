@@ -1,0 +1,19 @@
+---
+- name: install horizon
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - openstack-dashboard
+    - apache2
+
+- name: horizon base configuration
+  template:
+    src: local_settings.py.j2
+    dest: /etc/openstack-dashboard/local_settings.py
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload apache2
+
+- meta: flush_handlers

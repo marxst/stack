@@ -1,4 +1,4 @@
 ---
-rabbitmq_bind_address: 127.0.0.1
+rabbitmq_bind_address: '{{ os_mgmt_ip }}'
 rabbitmq_env_base:
   - { option: NODE_IP_ADDRESS, value: '{{ rabbitmq_bind_address }}' }

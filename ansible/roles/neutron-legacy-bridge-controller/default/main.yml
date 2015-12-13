@@ -1,6 +1,4 @@
 ---
-os_public_hostname: {{ ansible_fqdn }}
-
 neutron_ml2_config_base:
   - { section: 'DEFAULT', option: 'core_plugin', value: 'ml2' }
   - { section: 'DEFAULT', option: 'service_plugins', value: 'router' }
@@ -14,9 +12,9 @@ ml2_plugin_config_base:
   - { section: 'ml2_type_vxlan', option: 'vni_ranges', value: '1:1000' }
   - { section: 'securitygroup', option: 'enable_ipset', value: 'True' }
 ml2_bridge_config_base:
-  - { section: 'linux_bridge', option: 'physical_interface_mappings', value: 'public:eth0' }
+  - { section: 'linux_bridge', option: 'physical_interface_mappings', value: 'public:{{ os_public_iface }}' }
   - { section: 'vxlan', option: 'enable_vxlan', value: 'True' }
-  - { section: 'vxlan', option: 'local_ip', value: '127.0.0.1' }
+  - { section: 'vxlan', option: 'local_ip', value: '{{ os_tunnel_ip }}' }
   - { section: 'vxlan', option: 'l2_population', value: 'True' }
   - { section: 'agent', option: 'prevent_arp_spoofing', value: 'True' }
   - { section: 'securitygroup', option: 'enable_security_group', value: 'True' }
@@ -30,8 +28,8 @@ neutron_dhcp_config_base:
   - { section: 'DEFAULT', option: 'enable_isolated_metadata', value: 'True' }
   - { section: 'DEFAULT', option: 'dnsmasq_config_file', value: '/etc/neutron/dnsmasq-neutron.conf' }
 neutron_metadata_config_base:
-  - { section: 'DEFAULT', option: 'auth_uri', value: 'http://{{ os_public_hostname }}:5000' }
-  - { section: 'DEFAULT', option: 'auth_url', value: 'http://{{ os_public_hostname }}:35357' }
+  - { section: 'DEFAULT', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' }
+  - { section: 'DEFAULT', option: 'auth_url', value: 'http://{{ controller_mgmt_fqdn }}:35357' }
   - { section: 'DEFAULT', option: 'auth_plugin', value: 'password' }
   - { section: 'DEFAULT', option: 'auth_region', value: 'ReqgionOne' }
   - { section: 'DEFAULT', option: 'project_domain_id', value: 'default' }
@@ -39,7 +37,7 @@ neutron_metadata_config_base:
   - { section: 'DEFAULT', option: 'project_name', value: 'service' }
   - { section: 'DEFAULT', option: 'username', value: 'neutron' }
   - { section: 'DEFAULT', option: 'password', value: '{{ os_users.neutron.password }}' }
-  - { section: 'DEFAULT', option: 'nova_metadata_ip', value: '{{ os_public_hostname }}' }
+  - { section: 'DEFAULT', option: 'nova_metadata_ip', value: '{{ controller_mgmt_fqdn }}' }
   - { section: 'DEFAULT', option: 'metadata_proxy_shared_secret', value: '{{ metadata_proxy_shared_secret }}' }
 neutron_dnsmasq_config_base:
   - { option: 'dhcp-option-force', value: '26,1450' }

@@ -1,5 +1,4 @@
 ---
-os_public_hostname: '{{ ansible_fqdn }}'
 swift_proxy_config_base:
   - { section: 'DEFAULT', option: 'bind_port', value: '8080' }
   - { section: 'DEFAULT', option: 'user', value: 'swift' }
@@ -10,8 +9,8 @@ swift_proxy_config_base:
   - { section: 'filter:keystoneauth', option: 'use', value: 'egg:swift#keystoneauth' }
   - { section: 'filter:keystoneauth', option: 'operator_roles', value: 'admin,user' }
   - { section: 'filter:authtoken', option: 'paste.filter_factory', value: 'keystonemiddleware.auth_token:filter_factory' }
-  - { section: 'filter:authtoken', option: 'auth_uri', value: 'http://{{ os_public_hostname }}:5000' }
-  - { section: 'filter:authtoken', option: 'auth_url', value: 'http://{{ os_public_hostname }}:35357' }
+  - { section: 'filter:authtoken', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' }
+  - { section: 'filter:authtoken', option: 'auth_url', value: 'http://{{ controller_mgmt_fqdn }}:35357' }
   - { section: 'filter:authtoken', option: 'auth_plugin', value: 'password' }
   - { section: 'filter:authtoken', option: 'project_domain_id', value: 'default' }
   - { section: 'filter:authtoken', option: 'user_domain_id', value: 'default' }
@@ -20,7 +19,7 @@ swift_proxy_config_base:
   - { section: 'filter:authtoken', option: 'password', value: '{{ os_users.swift.password }}' }
   - { section: 'filter:authtoken', option: 'delay_auth_decision', value: 'True' }
   - { section: 'filter:cache', option: 'use', value: 'egg:swift#memcache' }
-  - { section: 'filter:cache', option: 'memcache_servers', value: '127.0.0.1:11211' }
+  - { section: 'filter:cache', option: 'memcache_servers', value: '{{ controller_mgmt_fqdn }}:11211' }
   - { section: 'filter:healthcheck', option: 'use', value: 'egg:swift#healthcheck' }
   - { section: 'filter:ratelimit', option: 'use', value: 'egg:swift#ratelimit' }
   - { section: 'filter:domain_remap', option: 'use', value: 'egg:swift#domain_remap' }

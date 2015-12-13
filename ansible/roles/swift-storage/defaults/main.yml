@@ -1,8 +1,8 @@
 ---
-swift_account_listen: 127.0.0.1
-swift_container_listen: 127.0.0.1
-swift_object_listen: 127.0.0.1
-swift_rsync_listen: 127.0.0.1
+swift_account_listen: '{{ os_mgmt_ip }}'
+swift_container_listen: '{{ os_mgmt_ip }}'
+swift_object_listen: '{{ os_mgmt_ip }}'
+swift_rsync_listen:  '{{ os_mgmt_ip }}'
 swift_root: /srv/node
 swift_partition_exponent: 10
 swift_replicas: '{{ swift_disks|length }}'

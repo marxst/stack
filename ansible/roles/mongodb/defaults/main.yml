@@ -1,3 +1,3 @@
 ---
 mongodb_config_base:
-  - { option: bind_ip, value: 127.0.0.1 }
+  - { option: bind_ip, value: '{{ os_mgmt_ip }}' }

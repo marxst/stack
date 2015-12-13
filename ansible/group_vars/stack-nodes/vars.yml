@@ -17,7 +17,6 @@ os_storage_iface: mgmt0
 os_tunnel_iface: tunnel0
 os_public_iface: br-ext
 
-controller_mgmt_ip: 192.168.99.2
 controller_mgmt_fqdn: controller.os_mgmt.local
 controller_mgmt_hostname: stack.chaosmoon.net
 

@@ -20,6 +20,7 @@
 
   post_tasks:
     - name: re-gather facts (interfaces might have changed)
+      setup:
 
     - name: get mgmt interface ip
       set_fact:

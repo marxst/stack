@@ -12,7 +12,11 @@
       tags: ['repositories']
     - role: firewall
       tags: ['firewall']
-
+    - role: dummy-interfaces
+      tags: ['dummy-interfaces']
+      dummies:
+        - { dummy: dummy0, name: mgmt0 }
+        - { dummy: dummy1, name: tunnel0 }
 
 - name: set up controller node (phase 1)
   hosts: controller-nodes

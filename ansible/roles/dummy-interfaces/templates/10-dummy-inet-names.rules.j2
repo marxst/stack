@@ -1,0 +1,4 @@
+{% for dummy in dummies %}
+SUBSYSTEM=="net", ACTION=="add", DEVPATH=="/devices/virtual/net/{{ dummy['dummy'] }}", NAME="{{ dummy['name'] | default(dummy['dummy']) }}"
+SUBSYSTEM=="net", ACTION=="add", DEVPATH=="/devices/virtual/net/{{ dummy['name'] | default(dummy['dummy']) }}", NAME="{{ dummy['name'] | default(dummy['dummy']) }}"
+{% endfor %}

@@ -1,0 +1,6 @@
+---
+- name: reload udev ruley
+  command: udevadm control --reload-rules
+
+- name: load dummy module
+  command: modprobe dummy

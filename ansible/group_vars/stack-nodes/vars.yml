@@ -12,6 +12,15 @@ metadata_proxy_shared_secret: '{{ vault_metadata_proxy_shared_secret }}'
 swift_hash_path_suffix: '{{ vault_swift_hash_path_suffix }}'
 swift_hash_path_prefix: '{{ vault_swift_hash_path_prefix }}'
 
+mgmt_iface: mgmt0
+storage_iface: mgmt0
+tunnel_iface: tunnel0
+public_iface: br-ext
+
+controller_mgmt_ip: 192.168.99.2
+controller_mgmt_fqdn: controller.os_mgmt.local
+os_public_hostname: stack.chaosmoon.net
+
 os_users:
   admin:
     domain: Default

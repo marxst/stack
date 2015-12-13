@@ -3,7 +3,7 @@
   keystone:
     command: ensure_service
     token: '{{ os_admin_token }}'
-    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    endpoint:  http://{{ controller_mgmt_fqdn }}:35357/v3
     service_name: '{{ item.name }}'
     service_type: '{{ item.type }}'
     description: '{{ item.desc }}'
@@ -19,7 +19,7 @@
   keystone:
     command: ensure_endpoint
     token: '{{ os_admin_token }}'
-    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    endpoint:  http://{{ controller_mgmt_fqdn }}:35357/v3
     region_name: '{{ item.region }}'
     service_name: '{{ item.name }}'
     service_type: '{{ item.type }}'
@@ -42,7 +42,7 @@
   keystone:
     command: ensure_project
     token: '{{ os_admin_token }}'
-    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    endpoint:  http://{{ controller_mgmt_fqdn }}:35357/v3
     project_name: '{{ item.name }}'
     domain_name: '{{ item.domain }}'
     description: '{{ item.desc }}'
@@ -58,7 +58,7 @@
   keystone:
     command: ensure_domain
     token: '{{ os_admin_token }}'
-    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    endpoint:  http://{{ controller_mgmt_fqdn }}:35357/v3
     insecure: true
     domain_name: '{{ item.name }}'
   register: add_domain
@@ -72,7 +72,7 @@
   keystone:
     command: ensure_user
     token: '{{ os_admin_token }}'
-    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    endpoint:  http://{{ controller_mgmt_fqdn }}:35357/v3
     user_name: '{{ item.key }}'
     password: '{{ item.value.password }}'
     domain_name: '{{ item.value.domain }}'
@@ -89,7 +89,7 @@
   keystone:
     command: ensure_role
     token: '{{ os_admin_token }}'
-    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    endpoint:  http://{{ controller_mgmt_fqdn }}:35357/v3
     role_name: '{{ item.name }}'
     insecure: true
   register: add_role
@@ -103,7 +103,7 @@
   keystone:
     command: ensure_user_role
     token: '{{ os_admin_token }}'
-    endpoint:  http://{{ os_public_hostname }}:35357/v3
+    endpoint:  http://{{ controller_mgmt_fqdn }}:35357/v3
     user_name: '{{ item.user }}'
     project_name: '{{ item.project }}'
     role_name: '{{ item.role }}'

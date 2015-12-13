@@ -1,9 +1,8 @@
 ---
-os_public_hostname: '{{ ansible_fqdn }}'
 keystone_config_base:
   - { section: 'DEFAULT', option: 'admin_token', value: '{{ os_admin_token }}' }
-  - { section: 'database', option: 'connection' , value: 'mysql+pymysql://keystone:{{ mysql_keystone_password }}@localhost/keystone' }
-  - { section: 'memcache', option: 'servers' , value: 'localhost:11211' }
+  - { section: 'database', option: 'connection' , value: 'mysql+pymysql://keystone:{{ mysql_keystone_password }}@{{ controller_mgmt_fqdn }}/keystone' }
+  - { section: 'memcache', option: 'servers' , value: '{{ controller_mgmt_fqdn }}:11211' }
   - { section: 'token', option: 'provider' , value: 'uuid' }
   - { section: 'token', option: 'driver', value: 'memcache' }
   - { section: 'revoke', option: 'driver', value: 'sql' }
@@ -25,63 +24,63 @@ os_domains:
 
 os_endpoints:
   - name: keystone
-    public: http://{{ os_public_hostname }}:5000/v2.0
-    internal: http://{{ os_public_hostname }}:5000/v2.0
-    admin: http://{{ os_public_hostname }}:35357/v2.0
+    public: http://{{ controller_public_fqdn }}:5000/v2.0
+    internal: http://{{ controller_mgmt_fqdn }}:5000/v2.0
+    admin: http://{{ controller_mgmt_fqdn }}:35357/v2.0
     region: RegionOne
     type: identity
   - name: glance
-    public: http://{{ os_public_hostname }}:9292
-    internal: http://{{ os_public_hostname }}:9292
-    admin: http://{{ os_public_hostname }}:9292
+    public: http://{{ controller_public_fqdn }}:9292
+    internal: http://{{ controller_mgmt_fqdn }}:9292
+    admin: http://{{ controller_mgmt_fqdn }}:9292
     region: RegionOne
     type: image
   - name: nova
-    public: http://{{ os_public_hostname }}:8774/v2/%(tenant_id)s
-    internal: http://{{ os_public_hostname }}:8774/v2/%(tenant_id)s
-    admin: http://{{ os_public_hostname }}:8774/v2/%(tenant_id)s
+    public: http://{{ controller_public_fqdn }}:8774/v2/%(tenant_id)s
+    internal: http://{{ controller_mgmt_fqdn }}:8774/v2/%(tenant_id)s
+    admin: http://{{ controller_mgmt_fqdn }}:8774/v2/%(tenant_id)s
     region: RegionOne
     type: compute
   - name: cinder
-    public: http://{{ os_public_hostname }}:8776/v1/%(tenant_id)s
-    internal: http://{{ os_public_hostname }}:8776/v1/%(tenant_id)s
-    admin: http://{{ os_public_hostname }}:8776/v1/%(tenant_id)s
+    public: http://{{ controller_public_fqdn }}:8776/v1/%(tenant_id)s
+    internal: http://{{ controller_mgmt_fqdn }}:8776/v1/%(tenant_id)s
+    admin: http://{{ controller_mgmt_fqdn }}:8776/v1/%(tenant_id)s
     region: RegionOne
     type: volume
   - name: cinderv2
-    public: http://{{ os_public_hostname }}:8776/v2/%(tenant_id)s
-    internal: http://{{ os_public_hostname }}:8776/v2/%(tenant_id)s
-    admin: http://{{ os_public_hostname }}:8776/v2/%(tenant_id)s
+    public: http://{{ controller_public_fqdn }}:8776/v2/%(tenant_id)s
+    internal: http://{{ controller_mgmt_fqdn }}:8776/v2/%(tenant_id)s
+    admin: http://{{ controller_mgmt_fqdn }}:8776/v2/%(tenant_id)s
     region: RegionOne
     type: volumev2
   - name: neutron
-    public: http://{{ os_public_hostname }}:9696
-    internal: http://{{ os_public_hostname }}:9696
-    admin: http://{{ os_public_hostname }}:9696
+    public: http://{{ controller_public_fqdn }}:9696
+    internal: http://{{ controller_mgmt_fqdn }}:9696
+    admin: http://{{ controller_mgmt_fqdn }}:9696
     region: RegionOne
     type: network
   - name: heat
-    public: http://{{ os_public_hostname }}:8004/v1/%(tenant_id)s
-    internal: http://{{ os_public_hostname }}:8004/v1/%(tenant_id)s
-    admin: http://{{ os_public_hostname }}:8004/v1/%(tenant_id)s
+    public: http://{{ controller_public_fqdn }}:8004/v1/%(tenant_id)s
+    internal: http://{{ controller_mgmt_fqdn }}:8004/v1/%(tenant_id)s
+    admin: http://{{ controller_mgmt_fqdn }}:8004/v1/%(tenant_id)s
     region: RegionOne
     type: orchestration
   - name: heat-cfn
-    public: http://{{ os_public_hostname }}:8000/v1
-    internal: http://{{ os_public_hostname }}:8000/v1
-    admin: http://{{ os_public_hostname }}:8000/v1
+    public: http://{{ controller_public_fqdn }}:8000/v1
+    internal: http://{{ controller_mgmt_fqdn }}:8000/v1
+    admin: http://{{ controller_mgmt_fqdn }}:8000/v1
     region: RegionOne
     type: cloudformation
   - name: murano
-    public: http://{{ os_public_hostname }}:8082
-    internal: http://{{ os_public_hostname }}:8082
-    admin: http://{{ os_public_hostname }}:8082
+    public: http://{{ controller_public_fqdn }}:8082
+    internal: http://{{ controller_mgmt_fqdn }}:8082
+    admin: http://{{ controller_mgmt_fqdn }}:8082
     region: RegionOne
     type: application_catalog
   - name: swift
-    public: http://{{ os_public_hostname }}:8080/v1/AUTH_%(tenant_id)s
-    internal: http://{{ os_public_hostname }}:8080/v1/AUTH_%(tenant_id)s
-    admin: http://{{ os_public_hostname }}:8080/v1
+    public: http://{{ controller_public_fqdn }}:8080/v1/AUTH_%(tenant_id)s
+    internal: http://{{ controller_mgmt_fqdn }}:8080/v1/AUTH_%(tenant_id)s
+    admin: http://{{ controller_mgmt_fqdn }}:8080/v1
     region: RegionOne
     type: object-store
 

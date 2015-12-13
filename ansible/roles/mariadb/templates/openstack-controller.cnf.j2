@@ -1,5 +1,5 @@
 [mysqld]
-bind-address = {{ mysql_bind_address|default('127.0.0.1') }}
+bind-address = {{ mysql_bind_address|default(os_mgmt_ip) }}
 default-storage-engine = innodb
 innodb_file_per_table
 collation-server = utf8_general_ci

@@ -11,4 +11,4 @@ glance_swift_store_congfig_base:
   - { section: 'ref1', option: 'user_domain_id', value: 'default' }
   - { section: 'ref1', option: 'project_domain_id', value: 'default' }
   - { section: 'ref1', option: 'auth_version', value: '3' }
-  - { section: 'ref1', option: 'auth_address', value: 'http://localhost:5000/v3' }
+  - { section: 'ref1', option: 'auth_address', value: 'http://{{ controller_mgmt_fqdn }}:5000/v3' }

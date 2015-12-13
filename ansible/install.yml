@@ -23,22 +23,22 @@
 
     - name: get mgmt interface ip
       set_fact:
-        os_mgmt_ip: {{ hostvars[inventory_hostname]['ansible_' + os_mgmt_iface]['ipv4']['address'] }}
+        os_mgmt_ip: "{{ hostvars[inventory_hostname]['ansible_' + os_mgmt_iface]['ipv4']['address'] }}"
       when: (os_mgmt_iface is defined) and (hostvars[inventory_hostname]['ansible_' + os_mgmt_iface] is defined)
 
     - name: get storage interface ip
       set_fact:
-        os_storage_ip: {{ hostvars[inventory_hostname]['ansible_' + os_storage_iface]['ipv4']['address'] }}
+        os_storage_ip: "{{ hostvars[inventory_hostname]['ansible_' + os_storage_iface]['ipv4']['address'] }}"
       when: (os_storage_iface is defined) and (hostvars[inventory_hostname]['ansible_' + os_storage_iface] is defined)
 
     - name: get tunnel interface ip
       set_fact:
-        os_tunnel_ip: {{ hostvars[inventory_hostname]['ansible_' + os_tunnel_iface]['ipv4']['address'] }}
+        os_tunnel_ip: "{{ hostvars[inventory_hostname]['ansible_' + os_tunnel_iface]['ipv4']['address'] }}"
       when: (os_tunnel_iface is defined) and (hostvars[inventory_hostname]['ansible_' + os_tunnel_iface] is defined)
 
     - name: get public interface ip
       set_fact:
-        os_public_ip: {{ hostvars[inventory_hostname]['ansible_' + os_public_iface]['ipv4']['address'] }}
+        os_public_ip: "{{ hostvars[inventory_hostname]['ansible_' + os_public_iface]['ipv4']['address'] }}"
       when: (os_public_iface is defined) and (hostvars[inventory_hostname]['ansible_' + os_public_iface] is defined)
 
 - name: set up controller node (phase 1)

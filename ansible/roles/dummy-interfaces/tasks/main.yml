@@ -1,0 +1,32 @@
+---
+- name: load dummy module on system start
+  lineinfile:
+    dest: /etc/modules
+    regexp: ^dummy\s+.*$
+    line: dummy
+    owner: root
+    group: root
+    mode: 0644
+
+- name: create udev rules to rename dummies
+  template:
+    dest: /etc/udev/rules.d/10-dummy-inet-names.rules
+    src: 10-dummy-inet-names.rules.j2
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload udev rules
+
+- name: set the amount of dummy interfaces to create
+  lineinfile:
+    dest: /etc/modprobe.d/dummy-net.conf
+    regexp: ^options dummy numdummies=.*$
+    line: options dummy numdummies={{ dummies|length }}
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+  notify: load dummy module
+
+- meta: flush_handlers

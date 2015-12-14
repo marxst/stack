@@ -1,0 +1,65 @@
+---
+# Example configurarion
+# interfaces:
+#   storage:
+#     iface: eth0
+#     config: >
+#       auto eth0
+#       iface eth0 inet static
+#         address 1.1.1.1
+#         netmask 2.2.2.2
+#         gateway 3.3.3.3
+#     script: >
+#       #!/bin/bash
+#       export PATH=/bin:/usr/bin:/sbin:/usr/sbin
+#       ifdown $1
+#       ifup $1
+#
+- name: install basic network/interfaces
+  template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: 0644
+
+- name: create interface directories
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - /etc/network/interfaces.d
+    - /etc/network/interfaces-scripts
+
+- name: create network configuration
+  copy:
+    dest: /etc/network/interfaces.d/{{ item.key }}.cfg
+    content: '{{ item.value.config }}'
+    owner: root
+    group: root
+    mode: 0644
+  register: interface_changes
+  with_dict: '{{ interfaces }}'
+  notify: apply interface changes
+
+# the following scripts will be called as follows:
+# <item.script> <item.interface>
+# whenever the <item.config> changes
+- name: create interface change apply script
+  copy:
+    content: '{{ item.value.script | default(default_script)  }}'       
+    dest: /etc/network/interfaces-scripts/{{ item.key }}.sh
+    owner: root
+    group: root
+    mode: 0754
+  with_dict: '{{ interfaces }}'
+  vars:
+    default_script: |
+      #!/bin/bash
+      ifdown ${1}
+      ifup ${1}
+
+- meta: flush_handlers

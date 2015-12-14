@@ -17,6 +17,8 @@
       dummies:
         - { dummy: dummy0, name: mgmt0 }
         - { dummy: dummy1, name: tunnel0 }
+    - role: network
+      tags: ['network']
 
   post_tasks:
     - name: re-gather facts (interfaces might have changed)

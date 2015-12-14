@@ -104,6 +104,12 @@ interfaces:
       #!/bin/bash
       PHYS_IFACE=eth0
       MAC=$(ip link show ${PHYS_IFACE}|grep -o 'ether [^ ]*'|cut -d ' ' -f2)
+
+      which ovs-vsctl >/dev/null 2>&1
+      if [ ${?} -ne 0 ]; then
+        apt-get -y install openvswitch-switch
+      fi
+
       ovs-vsctl list-br | grep -q "^${1}$"
       if [ ${?} -ne 0 ]; then
         ovs-vsctl add-br ${1}

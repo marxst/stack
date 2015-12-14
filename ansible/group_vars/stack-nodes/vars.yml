@@ -57,3 +57,62 @@ os_users:
     domain: Default
     project: service
     password: "{{ vault_swift_password }}"
+
+interfaces:
+  management:
+    iface: mgmt0
+    config: |
+      auto mgmt0
+      iface mgmt0 inet static
+        address 192.168.1.2
+        netmask 255.255.255.0
+  tunnel:
+    iface: tunnel0
+    config: |
+      auto mgmt0
+      iface tunnel0 inet static
+        address 10.0.1.2
+        netmask 255.255.255.0
+  phys-ext:
+    iface: eth0
+    config: |
+      auto eth0
+      iface eth0 inet manual
+      up ifconfig eth0 up
+    script: |
+      #!/bin/bash
+      exit 0
+  public:
+    iface: br-ext
+    config: |
+      auto  br-ext
+      iface br-ext inet static
+        address   5.9.157.244
+        netmask   255.255.255.224
+        gateway   5.9.157.225
+        up route add -net 5.9.157.224 netmask 255.255.255.224 gw 5.9.157.225 br-ext
+
+      iface br-ext inet static
+        address 136.243.203.33
+        netmask 255.255.255.240
+
+      iface br-ext inet6 static
+        address 2a01:4f8:190:50f3::2
+        netmask 64
+        gateway fe80::1
+    script: |
+      #!/bin/bash
+      PHYS_IFACE=eth0
+      MAC=$(ip link show ${PHYS_IFACE}|grep -o 'ether [^ ]*'|cut -d ' ' -f2)
+      ovs-vsctl list-br | grep -q "^${1}$"
+      if [ ${?} -ne 0 ]; then
+        ovs-vsctl add-br ${1}
+        ip addr flush ${PHYS_IFACE}
+        ovs-vsctl add-port ${1} ${PHYS_IFACE}
+        ovs-vsctl set bridge ${1} other-config:hwaddr=${MAC}
+        ifdown ${1}
+        ifup ${1}
+      else
+        ifdown ${1}
+        ifup ${1}
+      fi

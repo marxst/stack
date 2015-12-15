@@ -130,6 +130,8 @@
       tags: ['nova','nova-controller']
     - role: neutron-controller
       tags: ['neutron','neutron-controller']
+    - role: neutron-legacy-ovs-controller
+      tags: ['neutron','neutron-legacy-ovs-controller']
     - role: horizon
       tags: ['horizon']
     - role: reboot

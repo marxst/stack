@@ -8,7 +8,7 @@ RC=0
 swift-ring-builder /etc/swift/{{ builder[0] }} add \
   --region 1 \
   --zone {{ loop.index * host_loop.index }}\
-  --ip {{ hostvars[host][os_mgmt_ip] }}  \
+  --ip {{ hostvars[host]['os_mgmt_ip'] }}  \
   --port {{ builder[1] }} \
   --device {{ disk|basename }} \
   --weight 100

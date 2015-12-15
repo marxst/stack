@@ -39,7 +39,7 @@ neutron_metadata_config_base:
   - { section: 'DEFAULT', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' }
   - { section: 'DEFAULT', option: 'auth_url', value: 'http://{{ controller_mgmt_fqdn }}:35357' }
   - { section: 'DEFAULT', option: 'auth_plugin', value: 'password' }
-  - { section: 'DEFAULT', option: 'auth_region', value: 'ReqgionOne' }
+  - { section: 'DEFAULT', option: 'auth_region', value: 'RegionOne' }
   - { section: 'DEFAULT', option: 'project_domain_id', value: 'default' }
   - { section: 'DEFAULT', option: 'user_domain_id', value: 'default' }
   - { section: 'DEFAULT', option: 'project_name', value: 'service' }

@@ -74,7 +74,7 @@
 
 - name: neutron dhcp agent base configuration
   ini_file:
-    dest: /etc/neutron/l3_agent.ini
+    dest: /etc/neutron/dhcp_agent.ini
     owner: root
     group: root
     mode: 0644

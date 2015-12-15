@@ -33,3 +33,6 @@
         state: absent
       with_items:
         - [ account.builder, container.builder, object.builder, account.ring.gz, container.ring.gz, object.ring.gz ]
+    - name: fail on error during ring creation
+      fail:
+        msg: swift ring creation failed, check the ansible log

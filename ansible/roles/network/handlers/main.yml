@@ -1,0 +1,8 @@
+---
+- name: apply interface changes
+  command: /etc/network/interfaces-scripts/{{ item.item.key }}.sh {{ item.item.value.iface }}
+  async: 300
+  poll: 30
+  when: item|changed
+  with_items:
+    - "{{ interface_changes['results'] }}"

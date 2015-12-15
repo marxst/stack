@@ -32,3 +32,5 @@
   with_items:
     - '{{ ml2_ovs_compute_sysctl_config_base + ml2_ovs_compute_sysctl_config|default([]) }}'
   notify: apply sysctl settings
+
+- meta: flush_handlers

@@ -12,5 +12,5 @@ ml2_ovs_compute_config_base:
 ml2_ovs_compute_sysctl_config_base:
   - { option: 'net.ipv4.conf.default.rp_filter',value: '0'}
   - { option: 'net.ipv4.conf.all.rp_filter',value: '0'}
-  - { option: 'net.bridge.bridge-nf-call-iptables=1',value: '1'}
-  - { option: 'net.bridge.bridge-nf-call-ip6tables=1',value: '1'}
+  - { option: 'net.bridge.bridge-nf-call-iptables',value: '1'}
+  - { option: 'net.bridge.bridge-nf-call-ip6tables',value: '1'}

@@ -6,7 +6,8 @@
   with_items:
     - neutron-plugin-ml2
     - neutron-plugin-linuxbridge-agent
-    - neutron-l3-agent neutron-dhcp-agent
+    - neutron-l3-agent
+    - neutron-dhcp-agent
     - neutron-metadata-agent
 
 - name: neutron ml2 base configuration

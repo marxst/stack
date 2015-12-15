@@ -107,6 +107,8 @@
   roles:
     - role: nova-compute
       tags: ['nova','nova-compute']
+    - role: neutron-legacy-ovs-compute
+      tags: ['neutron','neutron-legacy-ovs-compute']
     - role: reboot
       tags: ['reboot',reboot-compute']
 

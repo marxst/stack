@@ -18,7 +18,7 @@ os_tunnel_iface: tunnel0
 os_public_iface: br-ext
 
 controller_mgmt_fqdn: controller.os_mgmt.local
-controller_mgmt_hostname: stack.chaosmoon.net
+controller_public_fqdn: stack.chaosmoon.net
 
 os_users:
   admin:

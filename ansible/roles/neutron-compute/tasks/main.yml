@@ -18,3 +18,14 @@
   no_log: true
   with_items:
     - '{{ neutron_compute_config_base + neutron_compute_config|default([]) }}'
+
+- name: load br_netfilter on system start
+  lineinfile:
+    dest: /etc/modules
+    line: br_netfilter
+    owner: root
+    group: root
+    mode: 0644
+
+- name: load br_netfilter module
+  command: modprobe br_netfilter

@@ -19,7 +19,7 @@ nova_compute_config_base:
   - { section: 'DEFAULT', option: 'firewall_driver' , value: 'nova.virt.firewall.NoopFirewallDriver' }
   - { section: 'DEFAULT', option: 'my_ip' , value: '{{ os_mgmt_ip }}' }
   - { section: 'vnc', option: 'enabled' , value: 'True' }
-  - { section: 'vnc', option: 'vncserver_listen' , value: '$myip' }
+  - { section: 'vnc', option: 'vncserver_listen' , value: '$my_ip' }
   - { section: 'vnc', option: 'vncserver_proxyclient_address' , value: '$my_ip' }
   - { section: 'vnc', option: 'novncproxy_base_url' , value: 'http://{{ controller_public_fqdn }}:6080/vnc_auto.html' }
   - { section: 'glance', option: 'host' , value: '{{ controller_mgmt_fqdn }}' }

@@ -21,3 +21,5 @@
     name: memcached
     enabled: '{{ memcached_enabled | default("yes") }}'
     state: '{{ memcached_state | default("started") }}'
+
+- meta: flush_handlers

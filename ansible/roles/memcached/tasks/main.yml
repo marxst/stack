@@ -4,6 +4,18 @@
     state: present
     name: memcached
 
+- name: memcached base configuration
+  lineinfile:
+    dest: /etc/memcached.conf
+    regexp: ^#*\s*{{ item.option }} .*$
+    line: '{{ item.option }} {{ item.value }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - '{{ memcached_config_base + memcached_config|default([]) }}'
+  notify: restart memached
+
 - name: enable / start memcached service
   service:
     name: memcached

@@ -1,0 +1,34 @@
+---
+- name: install neutron legacy openvswitch compute components
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - neutron-plugin-openvswitch-agent
+
+- name: ml2 openvswitch agent base configuration
+  ini_file:
+    dest: /etc/neutron/plugins/ml2/openvswitch_agent.ini
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ ml2_ovs_compute_config_base + ml2_ovs_compute_config|default([]) }}'
+  notify:
+    - restart neutron-plugin-openvswitch-agent
+
+- name: add sysctl settings for ovs compute
+  lineinfile:
+    dest: /etc/sysctl.conf
+    regexp: ^#*\s*{{ item.option }}\s*=.*
+    line: '{{ item.option }}={{ item.value }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - '{{ ml2_ovs_compute_sysctl_config_base + ml2_ovs_compute_sysctl_config|default([]) }}'
+  notify: apply sysctl settings

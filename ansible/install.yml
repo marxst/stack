@@ -72,7 +72,7 @@
 
   pre_tasks:
     - name: create partitions
-      command: parted -s {{ item }} mklabel gpt mkpart primary 2048s {{ cinder_size }} mkpart primary {{ cinder_size }} 100%
+      command: parted -s {{ item }} mklabel gpt mkpart primary 2048s {{ cinder_size }} mkpart primary {{ cinder_size }} {{ swift_size }}
       args:
         creates: '{{ item }}1'
       with_items:

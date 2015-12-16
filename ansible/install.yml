@@ -83,6 +83,20 @@
       args:
         creates: '{{ raid1_dest_device }}'
 
+    - name: get raid definition
+      command: mdadm -Es
+      register: raid_definition
+      changed_when: false
+
+    - name: persist raid definition in mdadm.conf
+      lineinfile:
+        dest: /etc/mdadm/mdadm.conf
+        line: '{{ raid_definition.stdout }}'
+        owner: root
+        group: root
+        mode: 0644
+        create: yes
+
   roles:
     - role: cinder-storage
       tags: ['cinder','cinder-storage']

@@ -69,7 +69,7 @@ interfaces:
   tunnel:
     iface: tunnel0
     config: |
-      auto mgmt0
+      auto tunnel0
       iface tunnel0 inet static
         address 10.0.1.2
         netmask 255.255.255.0

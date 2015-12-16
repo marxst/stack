@@ -7,6 +7,7 @@ raid1_src_devices:
   - /dev/sdb1
 raid1_dest_device: /dev/md0
 cinder_size: 2500GB
+swift_size: 100%
 cinder_vg_pvs:
   - '{{ raid1_dest_device }}'
 swift_disks:

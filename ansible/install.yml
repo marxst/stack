@@ -10,8 +10,6 @@
       tags: ['repositories']
     - role: base
       tags: ['base']
-    - role: firewall
-      tags: ['firewall']
     - role: dummy-interfaces
       tags: ['dummy-interfaces']
       dummies:

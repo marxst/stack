@@ -12,9 +12,7 @@
       tags: ['base']
     - role: dummy-interfaces
       tags: ['dummy-interfaces']
-      dummies:
-        - { dummy: dummy0, name: mgmt0 }
-        - { dummy: dummy1, name: tunnel0 }
+      dummies: '{{ dummy_interfaces }}'
     - role: network
       tags: ['network']
 

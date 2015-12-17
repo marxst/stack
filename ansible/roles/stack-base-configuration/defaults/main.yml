@@ -1,0 +1,15 @@
+---
+os_environment:
+  OS_PROJECT_DOMAIN_ID: default
+  OS_USER_DOMAIN_ID: default
+  OS_PROJECT_NAME: admin
+  OS_TENANT_NAME: admin
+  OS_USERNAME: admin
+  OS_REGION: RegionOne
+  OS_PASSWORD: '{{ os_admin_password }}'
+  OS_AUTH_URL: http://{{ controller_mgmt_fqdn }}:35357/v3
+  OS_IDENTITY_API_VERSION: 3
+  OS_IMAGE_API_VERSION: 2
+  OS_AUTH_VERSION: 3
+os_images:
+  - { name: 'cirros-3.4', url: 'http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img' }

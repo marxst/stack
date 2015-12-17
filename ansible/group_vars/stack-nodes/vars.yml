@@ -94,6 +94,7 @@ interfaces:
       iface tunnel0 inet static
         address 10.0.1.2
         netmask 255.255.255.0
+        mtu 9000
   public:
     iface: public0
     config: |

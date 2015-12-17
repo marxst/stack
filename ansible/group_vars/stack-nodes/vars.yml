@@ -20,6 +20,8 @@ os_public_iface: br-ext
 controller_mgmt_fqdn: controller.os_mgmt.local
 controller_public_fqdn: stack.chaosmoon.net
 
+os_public_network: 136.243.203.32/28
+
 os_users:
   admin:
     domain: Default

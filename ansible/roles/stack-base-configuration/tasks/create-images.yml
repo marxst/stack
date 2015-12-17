@@ -1,0 +1,23 @@
+---
+- block:
+    - name: download image
+      get_url:
+        dest: /var/tmp/{{ item['name'] }}
+        url: "{{ item['url'] }}"
+
+    - name: upload image to glance
+      command: >
+        glance image-create
+          --name "{{ item['name'] }}"
+          --file /var/tmp/{{ item['name'] }}
+          --disk-format {{ item['disk_format']|default('qcow2') }} 
+          --container-format {{ item['container_format']|default('bare') }}
+          --visibility public
+      environment: '{{ os_environment }}'
+
+    - name: delete temporary image download
+      file:
+        path: /var/tmp/{{ item['name'] }}
+        state: absent
+
+  when: "'{{ item['name'] }}' not in image_list.stdout|from_json|map(attribute='name')|list"

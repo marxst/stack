@@ -150,6 +150,8 @@
       tags: ['neutron','neutron-legacy-ovs-controller']
     - role: horizon
       tags: ['horizon']
+    - role: stack-base-configuration
+      tags: ['stack-base-configuration']
     - role: reboot
       tags: ['reboot','reboot-controller']
 

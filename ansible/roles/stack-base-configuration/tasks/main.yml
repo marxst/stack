@@ -1,0 +1,55 @@
+---
+- name: get network list
+  command: neutron net-list -f json
+  environment: '{{ os_environment }}'
+  changed_when: false
+  register: network_list
+
+- name: get subnet list
+  command: neutron subnet-list -f json
+  environment: '{{ os_environment }}'
+  changed_when: false
+  register: subnet_list
+
+- name: get image list
+  command: openstack image list -f json
+  environment: '{{ os_environment }}'
+  changed_when: false
+  register: image_list
+
+- name: create public network
+  command: neutron net-create public --shared --provider:physical_network public --provider:network_type flat
+  environment: '{{ os_environment }}'
+  register: public_network
+  when: "'public' not in network_list.stdout|from_json|map(attribute='name')|list"
+
+- name: make public network external
+  command: neutron net-update public --router:external
+  environment: '{{ os_environment }}'
+  when: public_network|changed
+  
+- name: get system nameservers
+  command: sed  -n -e 's/nameserver //g' -e'/^[0-9]/p' /etc/resolv.conf
+  register: nameservers
+  changed_when: false
+
+- name: set public subnet facts
+  set_fact:
+   dnsargs: "{{ (os_public_nameservers|default(nameservers.stdout_lines))[0:4]|ipv4|join(' ')|regex_replace('(\\S*)','--dns-nameserver \\1') }}"
+   pool_start: "{{ os_public_pool_start|default(os_public_network|ipaddr(2)|ipaddr('address')) }}"
+   pool_end: "{{ os_public_pool_end|default(os_public_network|ipaddr(-2)|ipaddr('address')) }}"
+
+- name: create public subnet
+  command: >
+    neutron subnet-create public 
+      --name public 
+      --disable-dhcp
+      --allocation-pool start={{ pool_start }},end={{ pool_end }}
+     {{ dnsargs }}
+     {{ os_public_network }}
+  environment: '{{ os_environment }}'
+  when: "'public' not in subnet_list.stdout|from_json|map(attribute='name')|list"
+
+- include: create-images.yml
+  with_items:
+    - '{{ os_images }}'

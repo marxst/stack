@@ -2,3 +2,4 @@
 nova_compute_config:
   - { section: 'libvirt', option: 'images_type', value: 'lvm' }
   - { section: 'libvirt', option: 'images_volume_group', value: 'cinder-volumes' }
+  - { section: 'libvirt', option: 'volume_clear', value: 'none' }

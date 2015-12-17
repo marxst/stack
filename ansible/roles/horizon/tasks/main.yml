@@ -7,6 +7,12 @@
     - openstack-dashboard
     - apache2
 
+- name: enable apache mod_rewrite
+  command: a2enmod rewrite
+  register: enable_rewrite
+  changed_when: "'Enabling module rewrite' in enable_rewrite.stdout"
+  notify: restart apache2
+
 - name: horizon base configuration
   template:
     src: local_settings.py.j2
@@ -14,6 +20,21 @@
     owner: root
     group: root
     mode: 0644
+  notify: reload apache2
+
+- name: add redirect webroot to horizon configuration
+  template:
+    src: horizon-redirect.conf.j2
+    dest: /etc/apache2/sites-available/horizon-redirect.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload apache2
+
+- name: enable redirect webroot to horizon configuration
+  command: a2ensite horizon-redirect
+  register: enable_horizon_redirect
+  changed_when: "'Enabling site horizon-redirect' in enable_horizon_redirect.stdout"
   notify: reload apache2
 
 - meta: flush_handlers

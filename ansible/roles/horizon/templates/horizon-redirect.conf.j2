@@ -1,0 +1,10 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@{{ controller_public_fqdn.split('.')[-2:]|join('.') }}
+
+    ErrorLog ${APACHE_LOG_DIR}/error_horizon_redirect.log
+    CustomLog ${APACHE_LOG_DIR}/access_horizon_redirect.log combined
+
+    RewriteEngine on
+    RewriteCond %{REQUEST_URI} !^/horizon
+    RewriteRule ^(.*)$ http://{{ controller_public_fqdn }}/horizon [L,R=301]
+</VirtualHost>

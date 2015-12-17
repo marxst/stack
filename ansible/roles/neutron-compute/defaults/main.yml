@@ -1,5 +1,5 @@
 ---
-neutron_control_config_base:
+neutron_compute_config_base:
   - { section: 'database', option: 'connection' , value: 'mysql+pymysql://neutron:{{ mysql_neutron_password }}@{{ controller_mgmt_fqdn }}/neutron' }
   - { section: 'DEFAULT', option: 'rpc_backend', value: 'rabbit' }
   - { section: 'oslo_messaging_rabbit', option: 'rabbit_host', value: '{{ controller_mgmt_fqdn }}' }

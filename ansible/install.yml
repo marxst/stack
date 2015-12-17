@@ -49,6 +49,16 @@
   tags:
     - controller
 
+  pre_tasks:
+    - name: set controller mgmt hostname
+      lineinfile:
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: 0644
+        regexp: ^{{ os_mgmt_ip }} .*$
+        line: "{{ os_mgmt_ip }} {{ controller_mgmt_fqdn }} {{ controller_mgmt_fqdn.split('.')[1] }}"
+
   roles:
     - role: memcached
       tags: ['memcached']
@@ -119,6 +129,8 @@
   roles:
     - role: nova-compute
       tags: ['nova','nova-compute']
+    - role: neutron-compute
+      tags: ['neutron','neutron-compute']
     - role: neutron-legacy-ovs-compute
       tags: ['neutron','neutron-legacy-ovs-compute']
     - role: reboot

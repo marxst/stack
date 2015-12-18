@@ -1,4 +1,15 @@
 ---
+- name: create admin environment file
+  lineinfile:
+    dest: /root/os-admin.sh
+    create: true
+    owner: root
+    group: root
+    mode: 0600
+    line: 'export {{ item.key }}={{ item.value }}'
+  with_dict: '{{ os_environment }}'
+  no_log: true
+
 - name: get network list
   command: neutron net-list -f json
   environment: '{{ os_environment }}'

@@ -1,0 +1,44 @@
+---
+heat_config_base:
+  - { section: 'database', option: 'connection', value: 'mysql+pymysql://heat:{{ mysql_heat_password }}@{{ controller_mgmt_fqdn }}/heat' }
+  - { section: 'DEFAULT', option: 'auth_strategy', value: 'keystone' }
+  - { section: 'DEFAULT', option: 'rpc_backend', value: 'rabbit' }
+  - { section: 'keystone_authtoken', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' }
+  - { section: 'keystone_authtoken', option: 'auth_url', value: 'http://{{ controller_mgmt_fqdn }}:35357' }
+  - { section: 'keystone_authtoken', option: 'auth_plugin', value: 'password' }
+  - { section: 'keystone_authtoken', option: 'project_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'user_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'project_name', value: 'service' }
+  - { section: 'keystone_authtoken', option: 'username', value: 'heat' }
+  - { section: 'keystone_authtoken', option: 'password', value: '{{ os_users.heat.password }}' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_host', value: '{{ controller_mgmt_fqdn }}' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_userid', value: 'openstack' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_password', value: '{{ rabbitmq_openstack_password }}' }
+  - { section: 'DEFAULT', option: 'stack_domain_admin', value: 'heat_domain_admin' }
+  - { section: 'DEFAULT', option: 'stack_domain_admin_password', value: '{{ os_users.heat_domain_admin.password }}' }
+  - { section: 'DEFAULT', option: 'stack_user_domain_name', value: 'heat' }
+  - { section: 'DEFAULT', option: 'heat_metadata_server_url', value: 'http://{{ controller_public_fqdn }}:8000' }
+  - { section: 'DEFAULT', option: 'heat_waitcondition_server_url', value: 'http://{{ controller_public_fqdn }}:8000/v1/waitcondition' }
+  - { section: 'clients_keystone', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' } 
+  - { section: 'ec2authtoken', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' } 
+  - { section: 'trustee', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' }
+  - { section: 'trustee', option: 'auth_url', value: 'http://{{ controller_mgmt_fqdn }}:35357' }
+  - { section: 'trustee', option: 'auth_plugin', value: 'password' }
+  - { section: 'trustee', option: 'project_domain_id', value: 'default' }
+  - { section: 'trustee', option: 'user_domain_id', value: 'default' }
+  - { section: 'trustee', option: 'project_name', value: 'service' }
+  - { section: 'trustee', option: 'username', value: 'heat' }
+  - { section: 'trustee', option: 'password', value: '{{ os_users.heat.password }}' }
+
+os_environment:
+  OS_PROJECT_DOMAIN_ID: default
+  OS_USER_DOMAIN_ID: default
+  OS_PROJECT_NAME: admin
+  OS_TENANT_NAME: admin
+  OS_USERNAME: admin
+  OS_REGION: RegionOne
+  OS_PASSWORD: '{{ os_admin_password }}'
+  OS_AUTH_URL: http://{{ controller_mgmt_fqdn }}:35357/v3
+  OS_IDENTITY_API_VERSION: 3
+  OS_IMAGE_API_VERSION: 2
+  OS_AUTH_VERSION: 3

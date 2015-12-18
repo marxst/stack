@@ -158,11 +158,13 @@
       tags: ['neutron','neutron-controller']
     - role: neutron-legacy-ovs-controller
       tags: ['neutron','neutron-legacy-ovs-controller']
+    - role: heat
+      tags: ['heat']
     - role: horizon
       tags: ['horizon']
-    - role: stack-base-configuration
-      tags: ['stack-base-configuration']
     - role: reboot
       tags: ['reboot','reboot-controller']
+    - role: stack-base-configuration
+      tags: ['stack-base-configuration']
 
 # vim: ft=ansible

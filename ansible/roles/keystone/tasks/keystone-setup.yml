@@ -83,6 +83,7 @@
   retries: 5
   delay: 10
   with_dict: '{{ os_users }}'
+  when: not item.value.manual_create|default(false)
   no_log: true
 
 - name: create roles

@@ -1,0 +1,75 @@
+---
+- name: install heat components
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - heat-api
+    - heat-api-cfn
+    - heat-engine
+    - python-heatclient
+
+- name: create heat DB
+  mysql_db:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: heat
+  notify: heat db_sync
+
+- name: create heat DB user
+  mysql_user:
+    state: present
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    name: heat
+    password: '{{ mysql_heat_password }}'
+    host: '{{ item }}'
+    priv: heat.*:ALL
+  with_items:
+    - localhost
+    - '%'
+  notify: heat db_sync
+
+# "manually" create the heat_domain_admin as the ansible keystone
+# does not allow users to be created without a project
+# see https://github.com/openstack/openstack-ansible/blob/master/playbooks/roles/os_heat/tasks/heat_domain_setup.yml#L55
+- name: create heat domain admin user
+  command: |
+    openstack user create \
+      --or-show \
+      --domain {{ os_users.heat_domain_admin.domain }} \
+      --password {{ os_users.heat_domain_admin.password }} \
+      "heat_domain_admin"
+  environment: '{{ os_environment }}'
+
+- name: Assign admin role to heat domain admin user
+  command: |
+    openstack role add \
+      --user heat_domain_admin \
+      --domain {{ os_users.heat_domain_admin.domain }} \
+      admin
+  environment: '{{ os_environment }}'
+
+- name: heat base configuration
+  ini_file:
+    dest: /etc/heat/heat.conf
+    owner: root
+    group: heat
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ heat_config_base + heat_config|default([]) }}'
+  notify:
+    - heat db_sync
+    - restart heat-api
+    - restart heat-api-cfn
+    - restart heat-engine
+
+- name: Remove unnecessary heat sqlite db
+  file:
+    path: /var/lib/heat/heat.sqlite
+    state: absent

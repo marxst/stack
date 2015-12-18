@@ -158,6 +158,8 @@
       tags: ['neutron','neutron-controller']
     - role: neutron-legacy-ovs-controller
       tags: ['neutron','neutron-legacy-ovs-controller']
+    - role: heat
+      tags: ['heat']
     - role: horizon
       tags: ['horizon']
     - role: stack-base-configuration

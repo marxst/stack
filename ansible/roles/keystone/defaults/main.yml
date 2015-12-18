@@ -101,5 +101,4 @@ os_role_assignments:
   - { role: admin, project: service, user: neutron }
   - { role: admin, project: service, user: murano }
   - { role: admin, project: service, user: heat }
-  - { role: admin, project: service, user: heat_domain_admin }
   - { role: admin, project: service, user: swift }

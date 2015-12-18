@@ -20,4 +20,4 @@
         path: /var/tmp/{{ item['name'] }}
         state: absent
 
-  when: "'{{ item['name'] }}' not in image_list.stdout|from_json|map(attribute='name')|list"
+  when: "'{{ item['name'] }}' not in image_list.stdout|from_json|map(attribute='Name')|list"

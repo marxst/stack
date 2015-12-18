@@ -117,7 +117,7 @@
     - role: swift-storage
       tags: ['swift','swift-storage']
     - role: reboot
-      tags: ['reboot',reboot-storage']
+      tags: ['reboot','reboot-storage']
 
 - name: set up compute nodes
   hosts: compute-nodes
@@ -134,7 +134,7 @@
     - role: neutron-legacy-ovs-compute
       tags: ['neutron','neutron-legacy-ovs-compute']
     - role: reboot
-      tags: ['reboot',reboot-compute']
+      tags: ['reboot','reboot-compute']
 
 - name: set up controller node (phase 2)
   hosts: controller-nodes

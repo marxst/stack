@@ -54,8 +54,8 @@ os_users:
     password: "{{ vault_heat_password }}"
   heat_domain_admin:
     domain: heat
-    project: service
     password: "{{ vault_heat_domain_admin_password }}"
+    manual_create: true
   murano:
     domain: Default
     project: service

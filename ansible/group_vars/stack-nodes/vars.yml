@@ -65,7 +65,7 @@ os_users:
     domain: Default
     project: service
     password: "{{ vault_swift_password }}"
-  ceilomeeter:
+  ceilometer:
     domain: Default
     project: service
     password: "{{ vault_ceilometer_password }}"

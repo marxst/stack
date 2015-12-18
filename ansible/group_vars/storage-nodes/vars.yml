@@ -13,3 +13,5 @@ cinder_vg_pvs:
 swift_disks:
   - /dev/sda2
   - /dev/sdb2
+cinder_lvm_config:
+  - { section: 'lvm', option: 'volume_clear_size', value: '1024' }

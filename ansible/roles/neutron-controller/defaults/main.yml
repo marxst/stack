@@ -25,3 +25,4 @@ neutron_control_config_base:
   - { section: 'nova', option: 'project_name', value: 'service' }
   - { section: 'nova', option: 'username', value: 'nova' }
   - { section: 'nova', option: 'password', value: '{{ os_users.nova.password }}' }
+  - { section: 'quota', option: 'quota_driver', value: 'neutron.db.quota_db.DbQuotaDriver' }

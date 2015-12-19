@@ -1,0 +1,84 @@
+---
+- name: install ceilometer controller components
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - ceilometer-api
+    - ceilometer-collector
+    - ceilometer-agent-central
+    - ceilometer-agent-notification
+    - ceilometer-alarm-evaluator
+    - ceilometer-alarm-notifier
+    - python-ceilometerclient
+
+- name: create ceilometer mongodb user
+  mongodb_user:
+    name: ceilometer
+    password: '{{ mongodb_ceilometer_password }}'
+    database: ceilometer
+    login_user: admin
+    login_password: '{{ mongodb_admin_password }}'
+    roles: readWrite,dbAdmin
+    state: present
+    login_host: '{{ controller_mgmt_fqdn }}'
+#  no_log: true
+
+- name: ceilometer base configuration
+  ini_file:
+    dest: /etc/ceilometer/ceilometer.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ ceilometer_control_config_base + ceilometer_control_config|default([]) }}'
+  notify:
+    - restart ceilometer-agent-central
+    - restart ceilometer-agent-notification
+    - restart ceilometer-api
+    - restart ceilometer-collector
+    - restart ceilometer-alarm-evaluator
+    - restart ceilometer-alarm-notifier
+
+- meta: flush_handlers
+
+- name: enable / start ceilometer-agent-central
+  service:
+    name: ceilometer-agent-central
+    enabled: '{{ ceilometer_agent_central_enabled | default("yes") }}'
+    state: '{{ ceilometer_agent_central_state | default("started") }}'
+
+- name: enable / start ceilometer-agent-notification
+  service:
+    name: ceilometer-agent-notification
+    enabled: '{{ ceilometer_agent_notification_enabled | default("yes") }}'
+    state: '{{ ceilometer_agent_notification_state | default("started") }}'
+
+- name: enable / start ceilometer-api
+  service:
+    name: ceilometer-api
+    enabled: '{{ ceilometer_api_enabled | default("yes") }}'
+    state: '{{ ceilometer_api_state | default("started") }}'
+
+- name: enable / start ceilometer-collector
+  service:
+    name: ceilometer-collector
+    enabled: '{{ ceilometer_collector_enabled | default("yes") }}'
+    state: '{{ ceilometer_collector_state | default("started") }}'
+
+- name: enable / start ceilometer-alarm-evaluator
+  service:
+    name: ceilometer-alarm-evaluator
+    enabled: '{{ ceilometer_alarm_evaluator_enabled | default("yes") }}'
+    state: '{{ ceilometer_alarm_evaluator_state | default("started") }}'
+
+- name: enable / start ceilometer-alarm-notifier
+  service:
+    name: ceilometer-alarm-notifier
+    enabled: '{{ ceilometer_alarm_notifier_enabled | default("yes") }}'
+    state: '{{ ceilometer_alarm_notifier_state | default("started") }}'
+

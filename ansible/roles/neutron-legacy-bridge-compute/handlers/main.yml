@@ -1,5 +1,0 @@
----
-- name: restart neutron-plugin-linuxbridge-agent
-  service:
-    name: neutron-plugin-linuxbridge-agent
-    state: restarted

@@ -99,6 +99,7 @@ os_roles:
   - { name: admin }
   - { name: heat_stack_owner }
   - { name: heat_stack_user }
+  - { name: ResellerAdmin }
 
 os_role_assignments:
   - { role: admin, project: admin, user: admin }
@@ -110,3 +111,4 @@ os_role_assignments:
   - { role: admin, project: service, user: heat }
   - { role: admin, project: service, user: swift }
   - { role: admin, project: service, user: ceilometer }
+  - { role: ResellerAdmin, project: service, user: ceilometer }

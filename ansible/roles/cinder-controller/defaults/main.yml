@@ -2,6 +2,7 @@
 cinder_control_config_base:
   - { section: 'database', option: 'connection', value: 'mysql+pymysql://cinder:{{ mysql_cinder_password }}@{{ controller_mgmt_fqdn }}/cinder' }
   - { section: 'DEFAULT', option: 'rpc_backend', value: 'rabbit' }
+  - { section: 'DEFAULT', option: 'notification_driver', value: 'messagingv2' }
   - { section: 'oslo_messaging_rabbit', option: 'rabbit_host', value: '{{ controller_mgmt_fqdn }}' }
   - { section: 'oslo_messaging_rabbit', option: 'rabbit_userid', value: 'openstack' }
   - { section: 'oslo_messaging_rabbit', option: 'rabbit_password', value: '{{ rabbitmq_openstack_password }}' }

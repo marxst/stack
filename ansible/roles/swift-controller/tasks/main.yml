@@ -9,6 +9,7 @@
     - python-swiftclient
     - python-keystoneclient
     - python-keystonemiddleware
+    - python-ceilometermiddleware
 
 - name: create swift config directory
   file:

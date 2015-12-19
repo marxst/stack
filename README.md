@@ -16,4 +16,5 @@ The current system this setup will be deployed on has the following specs:
 TODOs
 -----
 * refactor as hell, there is lots of code duplication (espacially regarding the config files)
+  * move keystone service/user/endpoint...creation to their respective roles
 * security (no SSL so far, internal services listening on 0.0.0.0)

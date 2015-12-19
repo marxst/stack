@@ -1,0 +1,17 @@
+---
+disks:
+  - /dev/sda
+  - /dev/sdb
+raid1_src_devices:
+  - /dev/sda1
+  - /dev/sdb1
+raid1_dest_device: /dev/md0
+cinder_size: 2500GB
+swift_size: 100%
+cinder_vg_pvs:
+  - '{{ raid1_dest_device }}'
+swift_disks:
+  - /dev/sda2
+  - /dev/sdb2
+cinder_lvm_config:
+  - { section: 'lvm', option: 'volume_clear_size', value: '1024' }

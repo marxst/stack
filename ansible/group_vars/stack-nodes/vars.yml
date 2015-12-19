@@ -1,0 +1,141 @@
+---
+mysql_root_password: '{{ vault_mysql_root_password }}'
+mysql_keystone_password: '{{ vault_mysql_keystone_password }}'
+mysql_glance_password: '{{ vault_mysql_glance_password }}'
+mysql_nova_password: '{{ vault_mysql_nova_password }}'
+mysql_cinder_password: '{{ vault_mysql_cinder_password }}'
+mysql_neutron_password: '{{ vault_mysql_neutron_password }}'
+mysql_heat_password: '{{ vault_mysql_heat_password }}'
+mysql_murano_password: '{{ vault_mysql_murano_password }}'
+mongodb_admin_password: '{{ vault_mongodb_admin_password }}'
+mongodb_ceilometer_password: '{{ vault_mongodb_ceilometer_password }}'
+rabbitmq_openstack_password: '{{ vault_rabbitmq_openstack_password }}'
+metadata_proxy_shared_secret: '{{ vault_metadata_proxy_shared_secret }}'
+swift_hash_path_suffix: '{{ vault_swift_hash_path_suffix }}'
+swift_hash_path_prefix: '{{ vault_swift_hash_path_prefix }}'
+
+os_mgmt_iface: mgmt0
+os_storage_iface: mgmt0
+os_tunnel_iface: tunnel0
+os_public_iface: br-ext
+
+dummy_interfaces:
+  - { dummy: dummy0, name: '{{ os_mgmt_iface }}' }
+  - { dummy: dummy1, name: '{{ os_tunnel_iface }}' }
+  - { dummy: dummy2, name: public0 }
+
+controller_mgmt_fqdn: controller.os_mgmt.local
+controller_public_fqdn: stack.chaosmoon.net
+
+os_public_network: 136.243.203.32/28
+
+os_users:
+  admin:
+    domain: Default
+    project: admin
+    password: "{{ os_admin_password }}"
+  glance:
+    domain: Default
+    project: service
+    password: "{{ vault_glance_password }}"
+  nova:
+    domain: Default
+    project: service
+    password: "{{ vault_nova_password }}"
+  cinder:
+    domain: Default
+    project: service
+    password: "{{ vault_cinder_password }}"
+  neutron:
+    domain: Default
+    project: service
+    password: "{{ vault_neutron_password }}"
+  heat:
+    domain: Default
+    project: service
+    password: "{{ vault_heat_password }}"
+  heat_domain_admin:
+    domain: heat
+    password: "{{ vault_heat_domain_admin_password }}"
+    manual_create: true
+  murano:
+    domain: Default
+    project: service
+    password: "{{ vault_murano_password }}"
+  swift:
+    domain: Default
+    project: service
+    password: "{{ vault_swift_password }}"
+  ceilometer:
+    domain: Default
+    project: service
+    password: "{{ vault_ceilometer_password }}"
+
+interfaces:
+  access:
+    iface: eth0
+    config: |
+      auto  eth0
+      iface eth0 inet static
+        address   5.9.157.244
+        netmask   255.255.255.224
+        gateway   5.9.157.225
+        up route add -net 5.9.157.224 netmask 255.255.255.224 gw 5.9.157.225 br-ext
+
+      iface eth0 inet6 static
+        address 2a01:4f8:190:50f3::2
+        netmask 64
+        gateway fe80::1
+  management:
+    iface: mgmt0
+    config: |
+      auto mgmt0
+      iface mgmt0 inet static
+        address 192.168.1.2
+        netmask 255.255.255.0
+  tunnel:
+    iface: tunnel0
+    config: |
+      auto tunnel0
+      iface tunnel0 inet static
+        address 10.0.1.2
+        netmask 255.255.255.0
+        mtu 9000
+  public:
+    iface: public0
+    config: |
+      auto public0
+      iface public0 inet manual
+      up ifconfig public0 up
+    script: |
+      #!/bin/bash
+      exit 0
+  os_external:
+    iface: br-ext
+    config: |
+      auto  br-ext
+      iface br-ext inet static
+        address 136.243.203.33
+        netmask 255.255.255.240
+    script: |
+      #!/bin/bash
+      PHYS_IFACE=public0
+      MAC=$(ip link show ${PHYS_IFACE}|grep -o 'ether [^ ]*'|cut -d ' ' -f2)
+
+      which ovs-vsctl >/dev/null 2>&1
+      if [ ${?} -ne 0 ]; then
+        apt-get -y install openvswitch-switch
+      fi
+
+      ovs-vsctl list-br | grep -q "^${1}$"
+      if [ ${?} -ne 0 ]; then
+        ovs-vsctl add-br ${1}
+        ip addr flush ${PHYS_IFACE}
+        ovs-vsctl add-port ${1} ${PHYS_IFACE}
+        ovs-vsctl set bridge ${1} other-config:hwaddr=${MAC}
+        ifdown ${1}
+        ifup ${1}
+      else
+        ifdown ${1}
+        ifup ${1}
+      fi

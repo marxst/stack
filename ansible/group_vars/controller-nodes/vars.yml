@@ -1,0 +1,3 @@
+---
+neutron_control_config:
+  - { section: 'quota', option: 'quota_router', value: '1' }

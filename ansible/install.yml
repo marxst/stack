@@ -133,6 +133,8 @@
       tags: ['neutron','neutron-compute']
     - role: neutron-legacy-ovs-compute
       tags: ['neutron','neutron-legacy-ovs-compute']
+    - role: ceilometer-compute
+      tags: ['ceilometer','ceilometer-compute']
     - role: reboot
       tags: ['reboot','reboot-compute']
 

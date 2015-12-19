@@ -1,0 +1,43 @@
+---
+- name: install ceilometer compute components
+  apt:
+    state: present
+    name: '{{ item }}'
+  with_items:
+    - ceilometer-agent-compute
+
+- name: nova compute ceilometer configuration
+  ini_file:
+    dest: /etc/nova/nova.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ nova_compute_ceilometer_config_base + nova_compute_ceilometer_config|default([]) }}'
+  notify: restart nova-compute
+
+- name: ceilometer compute configuration
+  ini_file:
+    dest: /etc/ceilometer/ceilometer.conf
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ ceilometer_compute_config_base + ceilometer_compute_config|default([]) }}'
+  notify: ceilometer-agent-compute
+
+- meta: flush_handlers
+
+- name: enable / start ceilometer-agent-compute
+  service:
+    name: ceilometer-agent-compute
+    enabled: '{{ ceilometer_agent_compute_enabled | default("yes") }}'
+    state: '{{ ceilometer_agent_compute_state | default("started") }}'

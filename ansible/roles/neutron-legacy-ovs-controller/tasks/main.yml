@@ -9,6 +9,7 @@
     - neutron-l3-agent
     - neutron-dhcp-agent
     - neutron-metadata-agent
+    - neutron-metering-agent
 
 - name: neutron ml2 base configuration
   ini_file:
@@ -116,6 +117,21 @@
   notify:
     - restart neutron-metadata-agent
 
+- name: neutron metering agent base configuration
+  ini_file:
+    dest: /etc/neutron/metering_agent.ini
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ neutron_metering_config_base + neutron_metering_config|default([]) }}'
+  notify:
+    - restart neutron-metering-agent
+
 - name: add sysctl settings for ovs compute
   lineinfile:
     dest: /etc/sysctl.conf
@@ -154,3 +170,9 @@
     name: neutron-l3-agent
     enabled: '{{ neutron_l3_agent_enabled | default("yes") }}'
     state: '{{ neutron_al3_agent_state | default("started") }}'
+
+- name: enable / start neutron-metering-agent service
+  service:
+    name: neutron-metering-agent
+    enabled: '{{ neutron_metering_agent_enabled | default("yes") }}'
+    state: '{{ neutron_metering_agent_state | default("started") }}'

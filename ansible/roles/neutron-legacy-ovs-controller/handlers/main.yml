@@ -28,5 +28,10 @@
     name: neutron-l3-agent
     state: restarted
 
+- name: restart neutron-metering-agent
+  service:
+    name: neutron-metering-agent
+    state: restarted
+
 - name: apply sysctl settings
   command: sysctl -p

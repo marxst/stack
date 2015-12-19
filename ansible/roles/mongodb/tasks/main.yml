@@ -26,3 +26,13 @@
   notify: restart mongodb
 
 - meta: flush_handlers
+
+- name: create mongodb admin user
+  mongodb_user:
+    name: admin
+    password: '{{ mongodb_admin_password }}'
+    database: admin
+    roles: userAdminAnyDatabase
+    state: present
+    login_host: '{{ controller_mgmt_fqdn }}'
+  no_log: true

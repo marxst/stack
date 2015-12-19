@@ -160,6 +160,8 @@
       tags: ['neutron','neutron-legacy-ovs-controller']
     - role: heat
       tags: ['heat']
+    - role: ceilometer-controller
+      tags: ['ceilometer','ceilometer-controller']
     - role: horizon
       tags: ['horizon']
     - role: reboot

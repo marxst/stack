@@ -1,0 +1,22 @@
+---
+ceilometer_control_config_base:
+  - { section: 'database', option: 'connection', value: 'mongodb://ceilometer:{{ mongodb_ceilometer_password }}@{{ controller_mgmt_fqdn }}:27017/ceilometer' }
+  - { section: 'DEFAULT', option: 'rpc_backend', value: 'rabbit' }
+  - { section: 'DEFAULT', option: 'auth_strategy', value: 'keystone' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_host', value: '{{ controller_mgmt_fqdn }}' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_userid', value: 'openstack' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_password', value: '{{ rabbitmq_openstack_password }}' }
+  - { section: 'keystone_authtoken', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' }
+  - { section: 'keystone_authtoken', option: 'auth_url', value: 'http://{{ controller_mgmt_fqdn }}:35357' }
+  - { section: 'keystone_authtoken', option: 'auth_plugin', value: 'password' }
+  - { section: 'keystone_authtoken', option: 'project_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'user_domain_id', value: 'default' }
+  - { section: 'keystone_authtoken', option: 'project_name', value: 'service' }
+  - { section: 'keystone_authtoken', option: 'username', value: 'ceilometer' }
+  - { section: 'keystone_authtoken', option: 'password', value: '{{ os_users.ceilometer.password }}' }
+  - { section: 'service_credentials', option: 'os_auth_url', value: 'http://{{ controller_mgmt_fqdn }}:5000/v2.0' }
+  - { section: 'service_credentials', option: 'os_username', value: 'ceilometer' }
+  - { section: 'service_credentials', option: 'os_tenant_name', value: 'service' }
+  - { section: 'service_credentials', option: 'os_password', value: '{{ os_users.ceilometer.password }}' }
+  - { section: 'service_credentials', option: 'os_endpoint_type', value: 'internalURL' }
+  - { section: 'service_credentials', option: 'os_region_name', value: 'RegionOne' }

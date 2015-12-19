@@ -1,7 +1,7 @@
 ---
 neutron_ml2_config_base:
   - { section: 'DEFAULT', option: 'core_plugin', value: 'ml2' }
-  - { section: 'DEFAULT', option: 'service_plugins', value: 'router' }
+  - { section: 'DEFAULT', option: 'service_plugins', value: 'router,metering' }
   - { section: 'DEFAULT', option: 'allow_overlapping_ips', value: 'True' }
 ml2_plugin_config_base:
   - { section: 'ml2', option: 'type_drivers', value: 'flat,vxlan' }
@@ -47,6 +47,9 @@ neutron_metadata_config_base:
   - { section: 'DEFAULT', option: 'password', value: '{{ os_users.neutron.password }}' }
   - { section: 'DEFAULT', option: 'nova_metadata_ip', value: '{{ controller_mgmt_fqdn }}' }
   - { section: 'DEFAULT', option: 'metadata_proxy_shared_secret', value: '{{ metadata_proxy_shared_secret }}' }
+neutron_metering_config_base:
+  - { section: 'DEFAULT', option: 'driver', value: 'neutron.services.metering.drivers.iptables.iptables_driver.IptablesMeteringDriver' }
+  - { section: 'DEFAULT', option: 'interface_driver', value: 'neutron.agent.linux.interface.OVSInterfaceDriver' }
 neutron_dnsmasq_config_base:
   - { option: 'dhcp-option-force', value: '26,1452' }
 ml2_ovs_compute_sysctl_config_base:

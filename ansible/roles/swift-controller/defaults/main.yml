@@ -3,11 +3,11 @@ swift_proxy_config_base:
   - { section: 'DEFAULT', option: 'bind_port', value: '8080' }
   - { section: 'DEFAULT', option: 'user', value: 'swift' }
   - { section: 'DEFAULT', option: 'swift_dir', value: '/etc/swift' }
-  - { section: 'pipeline:main', option: 'pipeline', value: 'catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk ratelimit authtoken keystoneauth container-quotas account-quotas slo dlo versioned_writes proxy-logging proxy-server' }
+  - { section: 'pipeline:main', option: 'pipeline', value: 'catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk ratelimit authtoken keystoneauth container-quotas account-quotas slo dlo versioned_writes proxy-logging ceilometer proxy-server' }
   - { section: 'app:proxy-server', option: 'use', value: 'egg:swift#proxy' }
   - { section: 'app:proxy-server', option: 'account_autocreate', value: 'True' }
   - { section: 'filter:keystoneauth', option: 'use', value: 'egg:swift#keystoneauth' }
-  - { section: 'filter:keystoneauth', option: 'operator_roles', value: 'admin,user' }
+  - { section: 'filter:keystoneauth', option: 'operator_roles', value: 'admin,user,ResellerAdmin' }
   - { section: 'filter:authtoken', option: 'paste.filter_factory', value: 'keystonemiddleware.auth_token:filter_factory' }
   - { section: 'filter:authtoken', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' }
   - { section: 'filter:authtoken', option: 'auth_url', value: 'http://{{ controller_mgmt_fqdn }}:35357' }
@@ -40,6 +40,12 @@ swift_proxy_config_base:
   - { section: 'filter:container_sync', option: 'use', value: 'egg:swift#container_sync' }
   - { section: 'filter:xprofile', option: 'use', value: 'egg:swift#xprofile' }
   - { section: 'filter:versioned_writes', option: 'use', value: 'egg:swift#versioned_writes' }
+  - { section: 'filter:ceilometer', option: 'paste.filter_factory', value: 'ceilometermiddleware.swift:filter_factory' }
+  - { section: 'filter:ceilometer', option: 'control_exchange', value: 'swift' }
+  - { section: 'filter:ceilometer', option: 'url', value: 'rabbit://openstack:{{ rabbitmq_openstack_password }}@{{ controller_mgmt_fqdn }}:5672/' }
+  - { section: 'filter:ceilometer', option: 'driver', value: 'messagingv2' }
+  - { section: 'filter:ceilometer', option: 'topic', value: 'notifications' }
+  - { section: 'filter:ceilometer', option: 'log_level', value: 'WARN' }
 
 swift_files:
   - account.builder

@@ -1,6 +1,9 @@
 ---
 glance_api_config_base:
-  - { section: 'DEFAULT', option: 'notification_driver', value: 'noop' }
+  - { section: 'DEFAULT', option: 'notification_driver', value: 'messagingv2' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_host', value: '{{ controller_mgmt_fqdn }}' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_userid', value: 'openstack' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_password', value: '{{ rabbitmq_openstack_password }}' }
   - { section: 'keystone_authtoken', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' }
   - { section: 'keystone_authtoken', option: 'auth_url', value: 'http://{{ controller_mgmt_fqdn }}:35357' }
   - { section: 'keystone_authtoken', option: 'auth_plugin', value: 'password' }
@@ -13,7 +16,10 @@ glance_api_config_base:
   - { section: 'paste_deploy', option: 'flavor', value: 'keystone' }
 
 glance_registry_config_base:
-  - { section: 'DEFAULT', option: 'notification_driver', value: 'noop' }
+  - { section: 'DEFAULT', option: 'notification_driver', value: 'messagingv2' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_host', value: '{{ controller_mgmt_fqdn }}' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_userid', value: 'openstack' }
+  - { section: 'oslo_messaging_rabbit', option: 'rabbit_password', value: '{{ rabbitmq_openstack_password }}' }
   - { section: 'keystone_authtoken', option: 'auth_uri', value: 'http://{{ controller_mgmt_fqdn }}:5000' }
   - { section: 'keystone_authtoken', option: 'auth_url', value: 'http://{{ controller_mgmt_fqdn }}:35357' }
   - { section: 'keystone_authtoken', option: 'auth_plugin', value: 'password' }

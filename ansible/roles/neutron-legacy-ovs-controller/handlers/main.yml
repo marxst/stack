@@ -3,6 +3,10 @@
   command: neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head
   become_user: neutron
 
+- name: neutron db_sync lbaas
+  command: neutron-db-manage --service lbaas upgrade head
+  become_user: neutron
+
 - name: restart neutron-server
   service:
     name: neutron-server
@@ -31,6 +35,11 @@
 - name: restart neutron-metering-agent
   service:
     name: neutron-metering-agent
+    state: restarted
+
+- name: restart neutron-lbaasv2-agent
+  service:
+    name: neutron-lbaasv2-agent
     state: restarted
 
 - name: apply sysctl settings

@@ -7,6 +7,10 @@
   command: neutron-db-manage --service lbaas upgrade head
   become_user: neutron
 
+- name: neutron db_sync fwaas
+  command: neutron-db-manage --service fwaas upgrade head
+  become_user: neutron
+
 - name: restart neutron-server
   service:
     name: neutron-server

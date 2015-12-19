@@ -1,7 +1,7 @@
 ---
 neutron_ml2_config_base:
   - { section: 'DEFAULT', option: 'core_plugin', value: 'ml2' }
-  - { section: 'DEFAULT', option: 'service_plugins', value: 'router,metering,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2' }
+  - { section: 'DEFAULT', option: 'service_plugins', value: 'router,metering,firewall,neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2' }
   - { section: 'DEFAULT', option: 'allow_overlapping_ips', value: 'True' }
 ml2_plugin_config_base:
   - { section: 'ml2', option: 'type_drivers', value: 'flat,vxlan' }
@@ -54,6 +54,10 @@ neutron_lbaas_agent_config_base:
   - { section: 'DEFAULT', option: 'interface_driver', value: 'neutron.agent.linux.interface.OVSInterfaceDriver' }
 neutron_lbaasv2_config_base:
   - { section: 'service_providers', option: 'service_provider', value: 'LOADBALANCERV2:Haproxy:neutron_lbaas.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default' }
+neutron_fwaas_config_base:
+  - { section: 'service_providers', option: 'service_provider', value: 'FIREWALL:Iptables:neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver:default' }
+  - { section: 'fwaas', option: 'driver', value: 'neutron_fwaas.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver' }
+  - { section: 'fwaas', option: 'enabled', value: 'True' }
 neutron_dnsmasq_config_base:
   - { option: 'dhcp-option-force', value: '26,1452' }
 ml2_ovs_compute_sysctl_config_base:

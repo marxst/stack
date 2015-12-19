@@ -165,6 +165,22 @@
     - restart neutron-lbaasv2-agent
     - neutron db_sync lbaas
 
+- name: neutron fwaas base configuration
+  ini_file:
+    dest: /etc/neutron/fwaas_driver.ini
+    owner: root
+    group: root
+    mode: 0644
+    section: '{{ item.section }}'
+    option: '{{ item.option|default(omit) }}'
+    value: '{{ item.value|default(omit) }}'
+  no_log: true
+  with_items:
+    - '{{ neutron_fwaas_config_base + neutron_fwaas_config|default([]) }}'
+  notify:
+    - restart neutron-l3-agent
+    - neutron db_sync fwaas
+
 - name: add sysctl settings for ovs compute
   lineinfile:
     dest: /etc/sysctl.conf

@@ -202,7 +202,7 @@
   service:
     name: neutron-l3-agent
     enabled: '{{ neutron_l3_agent_enabled | default("yes") }}'
-    state: '{{ neutron_al3_agent_state | default("started") }}'
+    state: '{{ neutron_l3_agent_state | default("started") }}'
 
 - name: enable / start neutron-metering-agent service
   service:

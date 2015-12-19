@@ -18,6 +18,7 @@ os_services:
   - { name: heat-cfn, desc: 'Orchestration', type: cloudformation }
   - { name: murano, desc: 'Application Catalog for OpenStack', type: application_catalog }
   - { name: swift, desc: 'OpenStack Object Storage', type: object-store }
+  - { name: ceilometer, desc: 'Telemetry', type: metering }
 
 os_domains:
   - { name: heat , desc: 'Stack projects and users' }
@@ -83,6 +84,12 @@ os_endpoints:
     admin: http://{{ controller_mgmt_fqdn }}:8080/v1
     region: RegionOne
     type: object-store
+  - name: ceilometer
+    public: http://{{ controller_public_fqdn }}:8777
+    internal: http://{{ controller_mgmt_fqdn }}:8777
+    admin: http://{{ controller_mgmt_fqdn }}:8777
+    region: RegionOne
+    type: metering
 
 os_projects:
   - { name: admin, desc: 'Admin Project', domain: Default }
@@ -102,3 +109,4 @@ os_role_assignments:
   - { role: admin, project: service, user: murano }
   - { role: admin, project: service, user: heat }
   - { role: admin, project: service, user: swift }
+  - { role: admin, project: service, user: ceilometer }
